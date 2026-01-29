@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vakansiya əlavə et - İşTap.az</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; }
+        .nav { background: #1557b0; padding: 10px; text-align: center; }
+        .nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 14px; }
+        .container { max-width: 600px; margin: 30px auto; padding: 0 15px; }
+        .form-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { color: #1a73e8; margin-bottom: 20px; text-align: center; }
+        label { display: block; margin-bottom: 5px; color: #555; font-weight: bold; margin-top: 15px; }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 5px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+        textarea { min-height: 100px; resize: vertical; }
+        button { width: 100%; padding: 15px; background: #1a73e8; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; }
+        button:hover { background: #1557b0; }
+        .back { text-align: center; margin-top: 15px; }
+        .back a { color: #1a73e8; text-decoration: none; }
+        .hint { color: #999; font-size: 12px; margin-bottom: 10px; }
+        .subcat { margin-left: 20px; color: #666; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>İşTap.az</h1>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html">Ana səhifə</a>
+        <a href="add-job.html">+ Vakansiya əlavə et</a>
+        <a href="login.html">Giriş</a>
+    </div>
+    
+    <div class="container">
+        <div class="form-box">
+            <h2>Yeni Vakansiya</h2>
+            
+            <label>Vakansiya adı *</label>
+            <input type="text" placeholder="Məs: Frontend Developer, Satıcı, Sürücü">
+            
+            <label>Şirkət adı *</label>
+            <input type="text" placeholder="Məs: Tech Solutions MMC">
+            
+            <label>Əsas Kateqoriya *</label>
+            <select id="mainCat" onchange="showSubCat()">
+                <option value="">-- Kateqoriya seç --</option>
+                <option value="satis">Satış</option>
+                <option value="tikinti">Tikinti və təmir</option>
+                <option value="surucu">Sürücülük və logistika</option>
+                <option value="restoran">Restoran və xidmət</option>
+                <option value="it">IT və texnologiya</option>
+                <option value="muhasib">Mühasibatlıq və maliyyə</option>
+                <option value="tehsil">Təhsil və tibb</option>
+                <option value="ofis">İnzibati və ofis</option>
+            </select>
+            
+            <label>Alt Kateqoriya *</label>
+            <select id="subCat">
+                <option value="">-- Əvvəlcə əsas kateqoriya seç --</option>
+            </select>
+            
+            <label>Şəhər *</label>
+            <select>
+                <option value="">-- Şəhər seç --</option>
+                <option>Bakı</option>
+                <option>Sumqayıt</option>
+                <option>Gəncə</option>
+                <option>Şəki</option>
+                <option>Quba</option>
+                <option>Şirvan</option>
+                <option>Mingəçevir</option>
+                <option>Naxçıvan</option>
+                <option>Lənkəran</option>
+                <option>Xaçmaz</option>
+                <option>Daşkəsən</option>
+                <option>Qazax</option>
+                <option>Balakən</option>
+                <option>Zaqatala</option>
+                <option>Qusar</option>
+                <option>Siyəzən</option>
+                <option>Şabran</option>
+                <option>Cəlilabad</option>
+                <option>Masallı</option>
+                <option>Astara</option>
+                <option>İmişli</option>
+                <option>Bərdə</option>
+                <option>Tovuz</option>
+                <option>Ağstafa</option>
+                <option>Qəbələ</option>
+                <option>İsmayıllı</option>
+                <option>Şamaxı</option>
+                <option>Hacıqabul</option>
+                <option>Saatlı</option>
+                <option>Sabirabad</option>
+                <option>Hacıqabul</option>
+                <option>Neftçala</option>
+                <option>Salyan</option>
+                <option>Biləsuvar</option>
+                <option>Cəbrayıl</option>
+                <option>Füzuli</option>
+                <option>Xocavənd</option>
+                <option>Şuşa</option>
+                <option>Xankəndi</option>
+                <option>Ağdam</option>
+                <option>Tərtər</option>
+                <option>Beyləqan</option>
+                <option>Zəngilan</option>
+                <option>Qubadlı</option>
+                <option>Ləçin</option>
+                <option>Kəlbəcər</option>
+                <option>Laçın</option>
+                <option>Şuşa</option>
+                <option>Xocalı</option>
+                <option>Ağcabədi</option>
+                <option>Ağsu</option>
+                <option>Göyçay</option>
+                <option>Ucar</option>
+                <option>Kürdəmir</option>
+                <option>Hacıqabul</option>
+                <option>Əli-Bayramlı</option>
+                <option>Yevlax</option>
+                <option>Göygöl</option>
+                <option>Daşkəsən</option>
+                <option>Gədəbəy</option>
+                <option>Şəmkir</option>
+                <option>Samux</option>
+                <option>Qazax</option>
+                <option>Ağstafa</option>
+                <option>Tovuz</option>
+                <option>Şəki</option>
+                <option>Oğuz</option>
+                <option>Qax</option>
+                <option>Zaqatala</option>
+                <option>Balakən</option>
+                <option>İlisu</option>
+            </select>
+            
+            <label>Əmək haqqı (AZN)</label>
+            <input type="text" placeholder="Məs: 2000-3000 vəya 1500+">
+            <p class="hint">Boş qoysan, "Razılaşma yolu ilə" yazılacaq</p>
+            
+            <label>İş təcrübəsi</label>
+            <select>
+                <option>Təcrübə tələb olunmur</option>
+                <option>1 ildən az</option>
+                <option>1-3 il</option>
+                <option>3-5 il</option>
+                <option>5 ildən çox</option>
+            </select>
+            
+            <label>İş qrafiki</label>
+            <select>
+                <option>Full-time (tam ştat)</option>
+                <option>Part-time (yarım ştat)</option>
+                <option>Freelance</option>
+                <option>Remote (udalənka)</option>
+                <option>Dəyişən qrafik</option>
+            </select>
+            
+            <label>Əlaqə telefonu *</label>
+            <input type="tel" placeholder="Məs: 050 123 45 67">
+            
+            <label>Əlaqə emaili</label>
+            <input type="email" placeholder="Məs: info@company.com">
+            
+            <label>İş təsviri və tələblər *</label>
+            <textarea placeholder="• Vəzifə öhdəlikləri&#10;• Namizədə tələblər&#10;• İş şəraiti&#10;• Əlavə məlumatlar"></textarea>
+            
+            <button>✅ Vakansiya əlavə et</button>
+            
+            <div class="back">
+                <a href="index.html">← Ana səhifəyə qayıt</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const subCategories = {
+            satis: ['Satıcı', 'Kassir', 'Satıcı-kassir', 'Daşınmaz əmlak agenti', 'Makler', 'Satış meneceri', 'Satış təmsilçisi', 'Distribütor', 'Merçendayzer'],
+            tikinti: ['Fəhlə', 'Plastik pəncərə ustası', 'Alüminium ustası', 'Elektrik', 'Santexnik', 'Mebel ustası', 'Malyar', 'Pol usta', 'Dam ustası', 'Kafel ustası', 'Mühəndis', 'Tikinti nəzarətçisi', 'Baş mühəndis'],
+            surucu: ['Sürücü', 'Kuryer', 'Sürücü-kuryer', 'Taksi şəxsi', 'Avtobus sürücüsü', 'Yük maşını sürücüsü', 'Ekskavator sürücüsü', 'Forklift sürücüsü'],
+            restoran: ['Ofisiant', 'Barmen', 'Aşpaz', 'Sous-şef', 'Şef aşpaz', 'Xadimə', 'Hostes', 'Menecer', 'Administrator', 'Kassir', 'Anbarçı', 'Çörəkçi', 'Konfetçi'],
+            it: ['Frontend Developer', 'Backend Developer', 'Full Stack Developer', 'Mobile Developer', 'UI/UX Dizayner', 'Qrafik dizayner', 'SMM menecer', 'Data analitik', 'SEO mütəxəssis', 'Kontent menecer', 'IT mütəxəssis', 'Texniki dəstək', 'Sistem administratoru'],
+            muhasib: ['Mühasib', 'Baş mühasib', 'Mühasib köməkçisi', 'Vergi uçotu meneceri', 'Maliyyə analitik', 'Kassir', 'İqtisadçı'],
+            tehsil: ['Müəllim', 'Baş müəllim', 'Təlimçi', 'Tədris meneceri', 'Təbib', 'Həkim', 'Tibb bacısı', 'Tibb bacısı köməkçisi', 'Psixoloq', 'Logoped', 'Fizioterapevt', 'Laborant'],
+            ofis: ['Ofis meneceri', 'İnzibati menecer', 'Sekretar', 'Katibə', 'Resepşn', 'Operator', 'Tərcüməçi', 'HR menecer', 'HR mütəxəssis', 'Ofis administratoru', 'Menecer köməkçisi', 'Personal mütəxəssisi']
+        };
+        
+        function showSubCat() {
+            const mainCat = document.getElementById('mainCat').value;
+            const subCatSelect = document.getElementById('subCat');
+            
+            subCatSelect.innerHTML = '<option value="">-- Alt kateqoriya seç --</option>';
+            
+            if (mainCat && subCategories[mainCat]) {
+                subCategories[mainCat].forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub;
+                    option.textContent = sub;
+                    subCatSelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
