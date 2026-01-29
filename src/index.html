@@ -3,37 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İşTap.az</title>
+    <title>İşTap.az - Azərbaycanın iş elanları saytı</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        
+        /* Header */
         .header { background: #1a73e8; color: white; padding: 15px; text-align: center; }
-        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        .nav { background: #1557b0; padding: 10px; text-align: center; }
+        .nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 14px; }
+        .nav a:hover { text-decoration: underline; }
+        
+        /* Axtarış bölməsi */
+        .search-section { background: #1a73e8; padding: 30px 15px; text-align: center; }
+        .search-box { max-width: 800px; margin: 0 auto; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .search-box input, .search-box select { padding: 12px; border: none; border-radius: 5px; font-size: 16px; }
+        .search-box input { flex: 1; min-width: 200px; }
+        .search-box select { min-width: 150px; }
+        .search-box button { padding: 12px 30px; background: #ff6b00; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        
+        /* Kateqoriyalar */
+        .categories { padding: 30px 15px; max-width: 1200px; margin: 0 auto; }
+        .categories h2 { margin-bottom: 20px; color: #333; }
+        .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .cat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s; }
+        .cat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .cat-card h3 { color: #1a73e8; margin-bottom: 10px; font-size: 16px; }
+        .cat-card p { color: #666; font-size: 13px; line-height: 1.6; }
+        .cat-count { color: #ff6b00; font-weight: bold; float: right; }
+        
+        /* Vakansiyalar */
+        .jobs { padding: 20px 15px; max-width: 800px; margin: 0 auto; }
+        .jobs h2 { margin-bottom: 20px; color: #333; }
         .job-card { background: white; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .job-title { color: #1a73e8; font-size: 18px; font-weight: bold; margin-bottom: 5px; }
         .job-company { color: #555; margin-bottom: 10px; }
-        .job-info { color: #777; font-size: 14px; }
-        .btn { background: #1a73e8; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        .job-info { color: #777; font-size: 14px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .btn { background: #1a73e8; color: white; padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <div class="header">
         <h1>İşTap.az</h1>
         <p>Azərbaycanın iş elanları saytı</p>
     </div>
     
-    <div class="container">
+    <!-- Navigasiya -->
+    <div class="nav">
+        <a href="index.html">Ana səhifə</a>
+        <a href="add-job.html">+ Vakansiya əlavə et</a>
+        <a href="login.html">Giriş</a>
+    </div>
+    
+    <!-- Axtarış -->
+    <div class="search-section">
+        <div class="search-box">
+            <input type="text" placeholder="Vakansiya axtar...">
+            <select>
+                <option value="">Bütün kateqoriyalar</option>
+                <option>Satış</option>
+                <option>Tikinti və təmir</option>
+                <option>Sürücülük və logistika</option>
+                <option>Restoran və xidmət</option>
+                <option>IT və texnologiya</option>
+                <option>Mühasibatlıq və maliyyə</option>
+                <option>Təhsil və tibb</option>
+                <option>İnzibati və ofis</option>
+            </select>
+            <button>Axtar</button>
+        </div>
+    </div>
+    
+    <!-- Kateqoriyalar -->
+    <div class="categories">
+        <h2>Populyar kateqoriyalar</h2>
+        <div class="cat-grid">
+            <div class="cat-card">
+                <h3>Satış <span class="cat-count">1,234 elan</span></h3>
+                <p>Satıcı, kassir, daşınmaz əmlak agenti, satış meneceri, satış təmsilçisi</p>
+            </div>
+            <div class="cat-card">
+                <h3>Tikinti və təmir <span class="cat-count">892 elan</span></h3>
+                <p>Fəhlə, plastik pəncərə ustası, elektrik, santexnik, mebel ustası</p>
+            </div>
+            <div class="cat-card">
+                <h3>Sürücülük və logistika <span class="cat-count">567 elan</span></h3>
+                <p>Sürücü, kuryer, sürücü-kuryer, taksi şəxsi</p>
+            </div>
+            <div class="cat-card">
+                <h3>Restoran və xidmət <span class="cat-count">445 elan</span></h3>
+                <p>Ofisiant, barmen, aşpaz, xadimə, hostes</p>
+            </div>
+            <div class="cat-card">
+                <h3>IT və texnologiya <span class="cat-count">323 elan</span></h3>
+                <p>Proqramçı, dizayner, SMM menecer, data analitik</p>
+            </div>
+            <div class="cat-card">
+                <h3>Mühasibatlıq və maliyyə <span class="cat-count">234 elan</span></h3>
+                <p>Mühasib, mühasib köməkçisi, vergi uçotu meneceri</p>
+            </div>
+            <div class="cat-card">
+                <h3>Təhsil və tibb <span class="cat-count">198 elan</span></h3>
+                <p>Müəllim, təlimçi, təbib, tibb bacısı, psixoloq</p>
+            </div>
+            <div class="cat-card">
+                <h3>İnzibati və ofis <span class="cat-count">156 elan</span></h3>
+                <p>Ofis meneceri, sekretar, operator, tərcüməçi, HR</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Son vakansiyalar -->
+    <div class="jobs">
+        <h2>Son vakansiyalar</h2>
+        
         <div class="job-card">
             <div class="job-title">Frontend Developer</div>
             <div class="job-company">Tech Solutions LLC</div>
-            <div class="job-info">📍 Bakı | 💰 2000-3000 AZN</div>
+            <div class="job-info">
+                <span>📍 Bakı</span>
+                <span>💰 2000-3000 AZN</span>
+                <span>🏷️ IT və texnologiya</span>
+            </div>
             <button class="btn">Ətraflı</button>
         </div>
         
         <div class="job-card">
-            <div class="job-title">Satış Menecəri</div>
+            <div class="job-title">Satış Meneceri</div>
             <div class="job-company">Grand Market</div>
-            <div class="job-info">📍 Sumqayıt | 💰 800-1200 AZN</div>
+            <div class="job-info">
+                <span>📍 Sumqayıt</span>
+                <span>💰 800-1200 AZN</span>
+                <span>🏷️ Satış</span>
+            </div>
+            <button class="btn">Ətraflı</button>
+        </div>
+        
+        <div class="job-card">
+            <div class="job-title">Sürücü-kuryer</div>
+            <div class="job-company">Express Logistics</div>
+            <div class="job-info">
+                <span>📍 Bakı</span>
+                <span>💰 600-900 AZN</span>
+                <span>🏷️ Sürücülük və logistika</span>
+            </div>
             <button class="btn">Ətraflı</button>
         </div>
     </div>
