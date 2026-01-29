@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Şirkət Profili - İşTap.az</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        
+        /* Header & Nav */
+        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; }
+        .nav { background: #1557b0; padding: 10px; text-align: center; }
+        .nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 14px; }
+        
+        /* Container */
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        
+        /* Company Header */
+        .company-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 10px; margin-bottom: 20px; position: relative; overflow: hidden; }
+        .company-header::before { content: "🏢"; position: absolute; right: 30px; top: 50%; transform: translateY(-50%); font-size: 100px; opacity: 0.2; }
+        .company-logo-small { width: 80px; height: 80px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 15px; }
+        .company-header h1 { font-size: 32px; margin-bottom: 10px; }
+        .company-header p { opacity: 0.9; margin-bottom: 5px; }
+        .company-stats { display: flex; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
+        .company-stat { text-align: center; }
+        .company-stat .number { font-size: 24px; font-weight: bold; }
+        .company-stat .label { font-size: 12px; opacity: 0.8; }
+        
+        /* Action Buttons */
+        .action-bar { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .btn { padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .btn-primary { background: #1a73e8; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-outline { background: white; color: #1a73e8; border: 2px solid #1a73e8; }
+        
+        /* Content Grid */
+        .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } }
+        
+        /* Main Content */
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+        
+        /* Section Cards */
+        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .card h3 { color: #333; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #1a73e8; }
+        .card p { color: #555; line-height: 1.8; margin-bottom: 15px; }
+        
+        /* Job List */
+        .job-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .job-item:last-child { border-bottom: none; }
+        .job-info h4 { color: #1a73e8; margin-bottom: 5px; }
+        .job-info p { color: #666; font-size: 14px; margin: 0; }
+        .job-meta { display: flex; gap: 15px; color: #999; font-size: 12px; margin-top: 5px; }
+        .job-actions { display: flex; gap: 5px; }
+        .btn-small { padding: 5px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .btn-view { background: #17a2b8; color: white; }
+        .btn-edit { background: #ffc107; color: #000; }
+        
+        /* Sidebar */
+        .sidebar { display: flex; flex-direction: column; gap: 20px; }
+        
+        /* Info Card */
+        .info-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .info-item:last-child { border-bottom: none; }
+        .info-icon { width: 35px; height: 35px; background: #e3f2fd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .info-text { flex: 1; }
+        .info-text small { color: #999; font-size: 11px; }
+        .info-text div { color: #333; font-weight: 500; }
+        
+        /* Social Links */
+        .social-links { display: flex; gap: 10px; margin-top: 15px; }
+        .social-btn { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .social-btn:hover { background: #f5f5f5; }
+        
+        /* Reviews */
+        .review-item { padding: 15px; border-bottom: 1px solid #eee; }
+        .review-item:last-child { border-bottom: none; }
+        .review-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .reviewer { font-weight: bold; color: #333; }
+        .rating { color: #ffc107; }
+        .review-text { color: #666; font-size: 14px; line-height: 1.6; }
+        .review-date { color: #999; font-size: 12px; margin-top: 5px; }
+        
+        /* Photo Gallery */
+        .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .gallery-item { aspect-ratio: 1; background: #e3f2fd; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; transition: transform 0.3s; }
+        .gallery-item:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>İşTap.az</h1>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html">Ana səhifə</a>
+        <a href="add-job.html">+ Vakansiya əlavə et</a>
+        <a href="profile.html">Profilim</a>
+        <a href="#" onclick="logout()">Çıxış</a>
+    </div>
+    
+    <div class="container">
+        <!-- Company Header -->
+        <div class="company-header">
+            <div class="company-logo-small">💻</div>
+            <h1>Tech Solutions LLC</h1>
+            <p>🌐 İnformasiya Texnologiyaları</p>
+            <p>📍 Bakı, Azərbaycan | 🏢 50-200 əməkdaş</p>
+            
+            <div class="company-stats">
+                <div class="company-stat">
+                    <div class="number">12</div>
+                    <div class="label">Aktiv vakansiya</div>
+                </div>
+                <div class="company-stat">
+                    <div class="number">156</div>
+                    <div class="label">Əməkdaş</div>
+                </div>
+                <div class="company-stat">
+                    <div class="number">8</div>
+                    <div class="label">İldir fəaliyyət</div>
+                </div>
+                <div class="company-stat">
+                    <div class="number">4.8</div>
+                    <div class="label">Reytinq ⭐</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button class="btn btn-success" onclick="location.href='add-job.html'">➕ Yeni vakansiya</button>
+            <button class="btn btn-primary">📊 Statistika</button>
+            <button class="btn btn-outline">✏️ Şirkəti düzənlə</button>
+            <button class="btn btn-outline">📢 Paylaş</button>
+        </div>
+        
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- About -->
+                <div class="card">
+                    <h3>🏢 Şirkət haqqında</h3>
+                    <p>Tech Solutions LLC 2018-ci ildə təsis edilmişdir. Şirkətimiz müasir web və mobil həllər hazırlayan aparıcı IT şirkətlərindən biridir.</p>
+                    <p>Əsas fəaliyyət istiqamətlərimiz:</p>
+                    <p>• Web saytların hazırlanması<br>
+                    • Mobil tətbiqlərin yaradılması<br>
+                    • Bulud həlləri (Cloud solutions)<br>
+                    • Kiber təhlükəsizlik<br>
+                    • IT konsaltinq</p>
+                </div>
+                
+                <!-- Active Jobs -->
+                <div class="card">
+                    <h3>📋 Aktiv vakansiyalarımız (12)</h3>
+                    
+                    <div class="job-item">
+                        <div class="job-info">
+                            <h4>Frontend Developer</h4>
+                            <p>💰 2000-3000 AZN | 📍 Bakı | ⏰ Full-time</p>
+                            <div class="job-meta">
+                                <span>👁️ 234 baxış</span>
+                                <span>📨 12 müraciət</span>
+                                <span>📅 30.01.2026</span>
+                            </div>
+                        </div>
+                        <div class="job-actions">
+                            <button class="btn-small btn-view" onclick="location.href='job-detail.html'">Bax</button>
+                            <button class="btn-small btn-edit">Düzənlə</button>
+                        </div>
+                    </div>
+                    
+                    <div class="job-item">
+                        <div class="job-info">
+                            <h4>Backend Developer</h4>
+                            <p>💰 2500-3500 AZN | 📍 Bakı | ⏰ Full-time</p>
+                            <div class="job-meta">
+                                <span>👁️ 189 baxış</span>
+                                <span>📨 8 müraciət</span>
+                                <span>📅 28.01.2026</span>
+                            </div>
+                        </div>
+                        <div class="job-actions">
+                            <button class="btn-small btn-view">Bax</button>
+                            <button class="btn-small btn-edit">Düzənlə</button>
+                        </div>
+                    </div>
+                    
+                    <div class="job-item">
+                        <div class="job-info">
+                            <h4>UI/UX Designer</h4>
+                            <p>💰 1500-2200 AZN | 📍 Bakı | ⏰ Full-time</p>
+                            <div class="job-meta">
+                                <span>👁️ 156 baxış</span>
+                                <span>📨 15 müraciət</span>
+                                <span>📅 25.01.2026</span>
+                            </div>
+                        </div>
+                        <div class="job-actions">
+                            <button class="btn-small btn-view">Bax</button>
+                            <button class="btn-small btn-edit">Düzənlə</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reviews -->
+                <div class="card">
+                    <h3>💬 İşçi rəyləri (23)</h3>
+                    
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="reviewer">Əli Məmmədov</span>
+                            <span class="rating">⭐⭐⭐⭐⭐</span>
+                        </div>
+                        <div class="review-text">Əla iş yeri! Komanda çox mehribandır. Remote iş imkanı da var.</div>
+                        <div class="review-date">15.01.2026</div>
+                    </div>
+                    
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="reviewer">Ayşə Quliyeva</span>
+                            <span class="rating">⭐⭐⭐⭐⭐</span>
+                        </div>
+                        <div class="review-text">Peşəkar mühit, maraqlı layihələr. Maaş vaxtında verilir.</div>
+                        <div class="review-date">10.01.2026</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Contact Info -->
+                <div class="card">
+                    <h3>📞 Əlaqə məlumatları</h3>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">📧</div>
+                        <div class="info-text">
+                            <small>Email</small>
+                            <div>info@techsolutions.az</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">📱</div>
+                        <div class="info-text">
+                            <small>Telefon</small>
+                            <div>+994 12 345 67 89</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">🌐</div>
+                        <div class="info-text">
+                            <small>Website</small>
+                            <div>www.techsolutions.az</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">📍</div>
+                        <div class="info-text">
+                            <small>Ünvan</small>
+                            <div>Bakı ş., Nizami r., Atatürk pr. 15</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">⏰</div>
+                        <div class="info-text">
+                            <small>İş saatları</small>
+                            <div>09:00 - 18:00 (5 gün)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <div class="social-btn">📘 FB</div>
+                        <div class="social-btn">💼 LN</div>
+                        <div class="social-btn">📸 IG</div>
+                    </div>
+                </div>
+                
+                <!-- Benefits -->
+                <div class="card">
+                    <h3>🎁 Üstünlüklərimiz</h3>
+                    <p>✅ Rəqabətli əmək haqqı<br>
+                    ✅ Sığorta<br>
+                    ✅ Remote iş imkanı<br>
+                    ✅ Təlim və inkişaf<br>
+                    ✅ Team building<br>
+                    ✅ Pulsuz çay/qəhvə<br>
+                    ✅ Parkinq</p>
+                </div>
+                
+                <!-- Photo Gallery -->
+                <div class="card">
+                    <h3>📸 Ofisimiz</h3>
+                    <div class="gallery">
+                        <div class="gallery-item">🏢</div>
+                        <div class="gallery-item">💻</div>
+                        <div class="gallery-item">☕</div>
+                        <div class="gallery-item">🎮</div>
+                        <div class="gallery-item">🤝</div>
+                        <div class="gallery-item">🎉</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function logout() {
+            if(confirm('Hesabdan çıxmaq istəyirsiniz?')) {
+                location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
