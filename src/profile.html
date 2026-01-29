@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilim - İşTap.az</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        
+        /* Header & Nav */
+        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; }
+        .nav { background: #1557b0; padding: 10px; text-align: center; }
+        .nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 14px; }
+        
+        /* Container */
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        
+        /* Profile Header */
+        .profile-header { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
+        .avatar { width: 100px; height: 100px; background: #1a73e8; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        .profile-info h2 { color: #333; margin-bottom: 5px; }
+        .profile-info p { color: #666; margin-bottom: 5px; }
+        .badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 12px; margin-top: 10px; }
+        .badge-seeker { background: #e3f2fd; color: #1976d2; }
+        .badge-employer { background: #f3e5f5; color: #7b1fa2; }
+        .edit-btn { background: #1a73e8; color: white; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; margin-left: auto; }
+        
+        /* Stats Cards */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; }
+        .stat-number { font-size: 32px; font-weight: bold; color: #1a73e8; }
+        .stat-label { color: #666; margin-top: 5px; font-size: 14px; }
+        
+        /* Content Grid */
+        .content-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } }
+        
+        /* Sidebar */
+        .sidebar { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); height: fit-content; }
+        .sidebar h3 { margin-bottom: 15px; color: #333; padding-bottom: 10px; border-bottom: 2px solid #1a73e8; }
+        .menu-list { list-style: none; }
+        .menu-list li { padding: 12px; cursor: pointer; border-radius: 5px; margin-bottom: 5px; transition: background 0.3s; }
+        .menu-list li:hover, .menu-list li.active { background: #e3f2fd; color: #1a73e8; }
+        .menu-list li i { margin-right: 10px; }
+        
+        /* Main Content */
+        .main-content { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .section-title { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #1a73e8; }
+        
+        /* Job List */
+        .job-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .job-item:last-child { border-bottom: none; }
+        .job-info h4 { color: #1a73e8; margin-bottom: 5px; }
+        .job-info p { color: #666; font-size: 14px; }
+        .job-status { padding: 5px 12px; border-radius: 15px; font-size: 12px; }
+        .status-active { background: #d4edda; color: #155724; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-expired { background: #f8d7da; color: #721c24; }
+        .job-actions { display: flex; gap: 5px; }
+        .btn-small { padding: 5px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .btn-edit { background: #ffc107; color: #000; }
+        .btn-delete { background: #dc3545; color: white; }
+        .btn-view { background: #17a2b8; color: white; }
+        
+        /* Saved Jobs */
+        .saved-item { display: flex; gap: 15px; padding: 15px; border-bottom: 1px solid #eee; }
+        .saved-item:last-child { border-bottom: none; }
+        .company-logo { width: 50px; height: 50px; background: #e3f2fd; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .saved-info { flex: 1; }
+        .saved-info h4 { color: #1a73e8; margin-bottom: 3px; }
+        .saved-info p { color: #666; font-size: 13px; margin-bottom: 3px; }
+        .saved-date { color: #999; font-size: 12px; }
+        
+        /* Settings Form */
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #555; font-weight: bold; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+        .btn-save { background: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>İşTap.az</h1>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html">Ana səhifə</a>
+        <a href="add-job.html">+ Vakansiya əlavə et</a>
+        <a href="profile.html">Profilim</a>
+        <a href="#" onclick="logout()">Çıxış</a>
+    </div>
+    
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar">👤</div>
+            <div class="profile-info">
+                <h2>Əli Məmmədov</h2>
+                <p>📧 ali.mammadov@email.com</p>
+                <p>📱 050 123 45 67</p>
+                <span class="badge badge-seeker">İş axtaran</span>
+            </div>
+            <button class="edit-btn" onclick="showSection('settings')">✏️ Profili düzənlə</button>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Saxlanmış vakansiya</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Müraciət etdiyim</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Yeni təklif</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">45</div>
+                <div class="stat-label">Profil baxışı</div>
+            </div>
+        </div>
+        
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <h3>📋 Menyu</h3>
+                <ul class="menu-list">
+                    <li class="active" onclick="showSection('saved')">⭐ Saxlanmışlar</li>
+                    <li onclick="showSection('applications')">📨 Müraciətlərim</li>
+                    <li onclick="showSection('offers')">💼 Təkliflər</li>
+                    <li onclick="showSection('cv')">📄 CV / Resume</li>
+                    <li onclick="showSection('settings')">⚙️ Tənzimləmələr</li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Saved Jobs -->
+                <div id="saved" class="content-section">
+                    <h3 class="section-title">⭐ Saxlanmış vakansiyalar</h3>
+                    
+                    <div class="saved-item">
+                        <div class="company-logo">💻</div>
+                        <div class="saved-info">
+                            <h4>Frontend Developer</h4>
+                            <p>Tech Solutions LLC • Bakı</p>
+                            <p class="saved-date">💰 2000-3000 AZN • 29.01.2026 tarixində saxlanıb</p>
+                        </div>
+                        <button class="btn-small btn-view" onclick="location.href='job-detail.html'">Bax</button>
+                    </div>
+                    
+                    <div class="saved-item">
+                        <div class="company-logo">🛒</div>
+                        <div class="saved-info">
+                            <h4>Satış Meneceri</h4>
+                            <p>Grand Store • Sumqayıt</p>
+                            <p class="saved-date">💰 800-1200 AZN • 28.01.2026 tarixində saxlanıb</p>
+                        </div>
+                        <button class="btn-small btn-view" onclick="location.href='job-detail.html'">Bax</button>
+                    </div>
+                    
+                    <div class="saved-item">
+                        <div class="company-logo">🚚</div>
+                        <div class="saved-info">
+                            <h4>Sürücü-kuryer</h4>
+                            <p>Express Logistics • Bakı</p>
+                            <p class="saved-date">💰 600-900 AZN • 27.01.2026 tarixində saxlanıb</p>
+                        </div>
+                        <button class="btn-small btn-view" onclick="location.href='job-detail.html'">Bax</button>
+                    </div>
+                </div>
+                
+                <!-- Applications -->
+                <div id="applications" class="content-section hidden">
+                    <h3 class="section-title">📨 Müraciətlərim</h3>
+                    
+                    <div class="job-item">
+                        <div class="job-info">
+                            <h4>React Developer</h4>
+                            <p>Digital Agency • 25.01.2026 tarixində müraciət edilib</p>
+                        </div>
+                        <span class="job-status status-pending">Gözləyir</span>
+                        <div class="job-actions">
+                            <button class="btn-small btn-view">Bax</button>
+                        </div>
+                    </div>
+                    
+                    <div class="job-item">
+                        <div class="job-info">
+                            <h4>Vue.js Developer</h4>
+                            <p>StartUp Hub • 20.01.2026 tarixində müraciət edilib</p>
+                        </div>
+                        <span class="job-status status-active">Baxıldı</span>
+                        <div class="job-actions">
+                            <button class="btn-small btn-view">Bax</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Offers -->
+                <div id="offers" class="content-section hidden">
+                    <h3 class="section-title">💼 Mənə gələn təkliflər</h3>
+                    <p style="color: #666; padding: 20px;">📭 Hələ yeni təklif yoxdur...</p>
+                </div>
+                
+                <!-- CV -->
+                <div id="cv" class="content-section hidden">
+                    <h3 class="section-title">📄 CV / Resume</h3>
+                    <div class="form-group">
+                        <label>CV-ni yüklə (PDF)</label>
+                        <input type="file" accept=".pdf,.doc,.docx">
+                    </div>
+                    <div class="form-group">
+                        <label>və ya onlayn CV yarat</label>
+                        <textarea placeholder="Təhsil, iş təcrübəsi, bacarıqlar..."></textarea>
+                    </div>
+                    <button class="btn-save">💾 Yadda saxla</button>
+                </div>
+                
+                <!-- Settings -->
+                <div id="settings" class="content-section hidden">
+                    <h3 class="section-title">⚙️ Profil tənzimləmələri</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ad</label>
+                            <input type="text" value="Əli">
+                        </div>
+                        <div class="form-group">
+                            <label>Soyad</label>
+                            <input type="text" value="Məmmədov">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" value="ali.mammadov@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Telefon</label>
+                        <input type="tel" value="050 123 45 67">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Şəhər</label>
+                        <select>
+                            <option selected>Bakı</option>
+                            <option>Sumqayıt</option>
+                            <option>Gəncə</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Haqqımda</label>
+                        <textarea placeholder="Özünüz haqqında qısa məlumat..."></textarea>
+                    </div>
+                    
+                    <button class="btn-save">💾 Dəyişiklikləri saxla</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showSection(sectionId) {
+            // Bütün bölmələri gizlət
+            document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
+            // Seçiləni göstər
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Menyu aktivliyini dəyiş
+            document.querySelectorAll('.menu-list li').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        function logout() {
+            if(confirm('Hesabdan çıxmaq istəyirsiniz?')) {
+                location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
