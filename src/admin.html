@@ -8,104 +8,88 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background: #f0f2f5; }
         
-        /* Login overlay */
+        /* Login */
         #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .login-box { background: white; padding: 40px; border-radius: 10px; width: 90%; max-width: 400px; text-align: center; }
         .login-box h2 { color: #1a73e8; margin-bottom: 20px; }
-        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
         .login-box button { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
-        .login-box .error { color: #e74c3c; margin-top: 10px; display: none; }
+        .login-box button:hover { background: #1557b0; }
+        .login-box .error { color: #e74c3c; margin-top: 10px; display: none; font-size: 14px; }
+        .login-box .info { color: #666; margin-top: 15px; font-size: 12px; }
+        .login-box .info a { color: #1a73e8; }
         
         /* Header */
-        .header { background: #1a73e8; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .header { background: #1a73e8; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
         .header-left { display: flex; align-items: center; gap: 10px; }
-        .menu-toggle { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 5px; }
+        .menu-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 5px; }
         .header h1 { font-size: 18px; }
-        .header-right { display: flex; align-items: center; gap: 15px; }
-        .admin-name { font-size: 14px; }
-        .logout { color: white; text-decoration: none; background: #ff4444; padding: 6px 12px; border-radius: 5px; font-size: 12px; }
+        .logout-btn { background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        .logout-btn:hover { background: #cc0000; }
         
         /* Layout */
-        .container { display: flex; min-height: calc(100vh - 50px); }
+        .container { display: flex; margin-top: 50px; min-height: calc(100vh - 50px); }
         
-        /* Sidebar - Kiçik və açılıb-bağlanan */
-        .sidebar { 
-            width: 60px; 
-            background: #2c3e50; 
-            color: white; 
-            transition: width 0.3s; 
-            overflow: hidden;
-            position: relative;
-        }
-        .sidebar.open { width: 250px; }
-        
-        .sidebar-header { padding: 15px; border-bottom: 1px solid #34495e; white-space: nowrap; }
-        .sidebar.open .sidebar-header { display: block; }
-        .sidebar:not(.open) .sidebar-header { display: none; }
-        
-        .menu-item { 
-            padding: 15px; 
-            cursor: pointer; 
-            transition: background 0.3s; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px;
-            white-space: nowrap;
-        }
+        /* Sidebar */
+        .sidebar { width: 250px; background: #2c3e50; color: white; position: fixed; left: -250px; top: 50px; bottom: 0; transition: left 0.3s; z-index: 99; overflow-y: auto; }
+        .sidebar.open { left: 0; }
+        .sidebar-header { padding: 20px; border-bottom: 1px solid #34495e; }
+        .sidebar-header h3 { margin: 0; font-size: 16px; }
+        .menu-item { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #34495e; transition: background 0.3s; display: flex; align-items: center; gap: 10px; }
         .menu-item:hover, .menu-item.active { background: #34495e; }
-        .menu-icon { font-size: 20px; width: 30px; text-align: center; }
-        .menu-text { display: none; }
-        .sidebar.open .menu-text { display: inline; }
-        
-        .menu-badge { 
-            background: #e74c3c; 
-            color: white; 
-            padding: 2px 6px; 
-            border-radius: 10px; 
-            font-size: 11px; 
-            margin-left: auto;
-            display: none;
-        }
-        .sidebar.open .menu-badge { display: inline-block; }
+        .menu-item .icon { font-size: 18px; }
+        .badge { background: #e74c3c; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin-left: auto; }
         
         /* Content */
-        .content { flex: 1; padding: 20px; overflow-y: auto; }
+        .content { flex: 1; padding: 20px; margin-left: 0; width: 100%; }
         
         /* Stats */
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-left: 4px solid #1a73e8; }
-        .stat-card h4 { color: #7f8c8d; font-size: 12px; margin-bottom: 5px; }
-        .stat-card .number { font-size: 24px; font-weight: bold; color: #2c3e50; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-left: 4px solid #1a73e8; }
+        .stat-card h4 { color: #7f8c8d; font-size: 14px; margin-bottom: 10px; }
+        .stat-card .number { font-size: 28px; font-weight: bold; color: #2c3e50; }
         
         /* Tables */
         .section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .section h3 { margin-bottom: 15px; color: #2c3e50; font-size: 16px; }
+        .section h3 { margin-bottom: 20px; color: #2c3e50; padding-bottom: 10px; border-bottom: 2px solid #1a73e8; }
         table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ecf0f1; }
-        th { background: #f8f9fa; color: #2c3e50; font-weight: bold; font-size: 12px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ecf0f1; }
+        th { background: #f8f9fa; color: #2c3e50; font-weight: bold; }
         tr:hover { background: #f8f9fa; }
-        .badge { padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }
-        .badge.pending { background: #fff3cd; color: #856404; }
-        .badge.approved { background: #d4edda; color: #155724; }
-        .badge.rejected { background: #f8d7da; color: #721c24; }
-        .badge.admin { background: #cce5ff; color: #004085; }
-        .badge.helper { background: #e2e3e5; color: #383d41; }
+        .status-badge { padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; }
+        .status-badge.pending { background: #fff3cd; color: #856404; }
+        .status-badge.approved { background: #d4edda; color: #155724; }
+        .status-badge.rejected { background: #f8d7da; color: #721c24; }
         
         /* Buttons */
-        .btn { padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 3px; }
+        .btn { padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; margin-right: 5px; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.8; }
+        .btn-view { background: #3498db; color: white; }
         .btn-approve { background: #27ae60; color: white; }
         .btn-reject { background: #e74c3c; color: white; }
-        .btn-view { background: #3498db; color: white; }
-        .btn-edit { background: #f39c12; color: white; }
         .btn-delete { background: #95a5a6; color: white; }
         
-        /* Role permissions info */
-        .perm-box { background: #e8f4f8; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #1a73e8; }
-        .perm-box h4 { margin-bottom: 10px; color: #1a73e8; }
-        .perm-list { display: flex; flex-wrap: wrap; gap: 10px; }
-        .perm-item { background: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; border: 1px solid #1a73e8; }
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #1a73e8; }
+        .modal-header h2 { color: #1a73e8; margin: 0; }
+        .close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #666; line-height: 1; }
+        .close-btn:hover { color: #000; }
+        .detail-row { margin-bottom: 15px; }
+        .detail-row label { font-weight: bold; color: #555; display: block; margin-bottom: 5px; font-size: 14px; }
+        .detail-row .value { color: #333; line-height: 1.5; }
+        .detail-row .value pre { white-space: pre-wrap; font-family: inherit; margin: 0; background: #f8f9fa; padding: 10px; border-radius: 5px; }
+        .modal-actions { display: flex; gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; flex-wrap: wrap; }
         
         .hidden { display: none !important; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { width: 200px; left: -200px; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
@@ -113,70 +97,45 @@
     <div id="loginOverlay">
         <div class="login-box">
             <h2>🔐 Admin Girişi</h2>
-            <input type="text" id="adminUser" placeholder="İstifadəçi adı">
+            <input type="email" id="adminEmail" placeholder="Admin email" value="">
             <input type="password" id="adminPass" placeholder="Şifrə">
             <button onclick="checkLogin()">Daxil ol</button>
-            <p class="error" id="loginError">❌ Yanlış istifadəçi adı və ya şifrə!</p>
-            <p style="margin-top: 15px; font-size: 12px; color: #666;">
-                <a href="index.html" style="color: #1a73e8;">← Ana səhifəyə qayıt</a>
+            <p class="error" id="loginError">❌ Yanlış email və ya şifrə!</p>
+            <p class="info">
+                Əvvəlcə saytda <a href="register.html" target="_blank">qeydiyyatdan keçin</a>,<br>
+                sonra buradan daxil olun.
             </p>
         </div>
     </div>
 
-    <!-- Main Content (Gizli başlanğıcda) -->
+    <!-- Main Content -->
     <div id="mainContent" class="hidden">
         <div class="header">
             <div class="header-left">
-                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+                <button class="menu-btn" onclick="toggleMenu()">☰</button>
                 <h1>Admin Panel</h1>
             </div>
-            <div class="header-right">
-                <span class="admin-name" id="adminName">Admin</span>
-                <a href="#" class="logout" onclick="logout()">Çıxış</a>
-            </div>
+            <button class="logout-btn" onclick="logout()">🚪 Çıxış</button>
         </div>
         
         <div class="container">
             <!-- Sidebar -->
             <div class="sidebar" id="sidebar">
                 <div class="sidebar-header">
-                    <h3>📋 Menyu</h3>
+                    <h3>📋 İdarəetmə Paneli</h3>
                 </div>
-                
-                <div class="menu-item active" onclick="showSection('dashboard')">
-                    <span class="menu-icon">📊</span>
-                    <span class="menu-text">Dashboard</span>
+                <div class="menu-item active" onclick="showSection('dashboard', this)">
+                    <span class="icon">📊</span> Dashboard
                 </div>
-                
-                <div class="menu-item" onclick="showSection('pending')" id="menuPending">
-                    <span class="menu-icon">⏳</span>
-                    <span class="menu-text">Gözləyənlər</span>
-                    <span class="menu-badge">12</span>
+                <div class="menu-item" onclick="showSection('pending', this)">
+                    <span class="icon">⏳</span> Gözləyən elanlar
+                    <span class="badge" id="pendingCountBadge">0</span>
                 </div>
-                
-                <div class="menu-item" onclick="showSection('approved')" id="menuApproved">
-                    <span class="menu-icon">✅</span>
-                    <span class="menu-text">Aktiv elanlar</span>
+                <div class="menu-item" onclick="showSection('approved', this)">
+                    <span class="icon">✅</span> Aktiv elanlar
                 </div>
-                
-                <div class="menu-item" onclick="showSection('users')" id="menuUsers">
-                    <span class="menu-icon">👥</span>
-                    <span class="menu-text">İstifadəçilər</span>
-                </div>
-                
-                <div class="menu-item admin-only hidden" onclick="showSection('admins')" id="menuAdmins">
-                    <span class="menu-icon">🛡️</span>
-                    <span class="menu-text">Adminlər</span>
-                </div>
-                
-                <div class="menu-item admin-only hidden" onclick="showSection('categories')" id="menuCategories">
-                    <span class="menu-icon">📁</span>
-                    <span class="menu-text">Kateqoriyalar</span>
-                </div>
-                
-                <div class="menu-item" onclick="showSection('settings')" id="menuSettings">
-                    <span class="menu-icon">⚙️</span>
-                    <span class="menu-text">Tənzimləmələr</span>
+                <div class="menu-item" onclick="showSection('users', this)">
+                    <span class="icon">👥</span> İstifadəçilər
                 </div>
             </div>
             
@@ -184,241 +143,524 @@
             <div class="content">
                 <!-- Dashboard -->
                 <div id="dashboard" class="section-content">
-                    <div class="perm-box" id="permBox">
-                        <h4>🔑 Sənin icazələrin:</h4>
-                        <div class="perm-list" id="permList">
-                            <!-- JS ilə doldurulacaq -->
-                        </div>
-                    </div>
-                    
                     <div class="stats">
                         <div class="stat-card">
-                            <h4>⏳ Gözləyən</h4>
-                            <div class="number">12</div>
+                            <h4>⏳ Gözləyən elanlar</h4>
+                            <div class="number" id="statPending">0</div>
                         </div>
                         <div class="stat-card">
-                            <h4>✅ Aktiv</h4>
-                            <div class="number">456</div>
+                            <h4>✅ Aktiv elanlar</h4>
+                            <div class="number" id="statApproved">0</div>
                         </div>
                         <div class="stat-card">
-                            <h4>👥 İstifadəçilər</h4>
-                            <div class="number">89</div>
+                            <h4>👥 Ümumi istifadəçilər</h4>
+                            <div class="number" id="statUsers">0</div>
                         </div>
                         <div class="stat-card">
-                            <h4>📅 Bugün</h4>
-                            <div class="number">8</div>
+                            <h4>📅 Bugün əlavə edilən</h4>
+                            <div class="number" id="statToday">0</div>
                         </div>
                     </div>
                     
                     <div class="section">
-                        <h3>🕐 Son əlavə edilənlər</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Vakansiya</th>
-                                    <th>Şirkət</th>
-                                    <th>Kateqoriya</th>
-                                    <th>Status</th>
-                                    <th>Əməliyyatlar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Frontend Developer</td>
-                                    <td>Tech Solutions</td>
-                                    <td>IT</td>
-                                    <td><span class="badge pending">Gözləyir</span></td>
-                                    <td>
-                                        <button class="btn btn-approve action-approve">Təsdiqlə</button>
-                                        <button class="btn btn-view">Bax</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Satış Meneceri</td>
-                                    <td>Grand Store</td>
-                                    <td>Satış</td>
-                                    <td><span class="badge pending">Gözləyir</span></td>
-                                    <td>
-                                        <button class="btn btn-approve action-approve">Təsdiqlə</button>
-                                        <button class="btn btn-view">Bax</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <h3>🕐 Son əlavə edilən vakansiyalar</h3>
+                        <div id="recentJobsList">
+                            <p style="color: #666; padding: 20px;">Yüklənir...</p>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Digər bölmələr -->
+                <!-- Pending Jobs -->
                 <div id="pending" class="section-content hidden">
                     <div class="section">
                         <h3>⏳ Təsdiq gözləyən elanlar</h3>
-                        <p>Burada gözləyən elanların siyahısı olacaq...</p>
+                        <div id="pendingJobsList">
+                            <p style="color: #666; padding: 20px;">Yüklənir...</p>
+                        </div>
                     </div>
                 </div>
                 
+                <!-- Approved Jobs -->
                 <div id="approved" class="section-content hidden">
                     <div class="section">
                         <h3>✅ Aktiv elanlar</h3>
-                        <p>Burada aktiv elanların siyahısı olacaq...</p>
+                        <div id="approvedJobsList">
+                            <p style="color: #666; padding: 20px;">Yüklənir...</p>
+                        </div>
                     </div>
                 </div>
                 
+                <!-- Users -->
                 <div id="users" class="section-content hidden">
                     <div class="section">
                         <h3>👥 İstifadəçilər</h3>
-                        <p>Burada istifadəçilərin siyahısı olacaq...</p>
-                    </div>
-                </div>
-                
-                <div id="admins" class="section-content hidden">
-                    <div class="section">
-                        <h3>🛡️ Admin idarəetməsi</h3>
-                        <p>Yalnız Super Admin görür...</p>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Admin</th>
-                                    <th>Rol</th>
-                                    <th>İcazələr</th>
-                                    <th>Əməliyyatlar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Sən (Super Admin)</td>
-                                    <td><span class="badge admin">Super Admin</span></td>
-                                    <td>Hamısı</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td>Köməkçi 1</td>
-                                    <td><span class="badge helper">Köməkçi</span></td>
-                                    <td>Yalnız baxış</td>
-                                    <td>
-                                        <button class="btn btn-edit">Dəyiş</button>
-                                        <button class="btn btn-delete">Sil</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <div id="categories" class="section-content hidden">
-                    <div class="section">
-                        <h3>📁 Kateqoriyalar</h3>
-                        <p>Yalnız Super Admin dəyişə bilər...</p>
-                    </div>
-                </div>
-                
-                <div id="settings" class="section-content hidden">
-                    <div class="section">
-                        <h3>⚙️ Tənzimləmələr</h3>
-                        <p>Sayt parametrləri...</p>
+                        <div id="usersList">
+                            <p style="color: #666; padding: 20px;">Yüklənir...</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Adminlər və icazələr
-        const admins = {
-            'superadmin': {
-                password: 'admin123',
-                name: 'Super Admin',
-                role: 'super',
-                permissions: ['Hamısı: Elan təsdiqi', 'Elan silmə', 'İstifadəçi idarəetməsi', 'Admin əlavəetmə', 'Kateqoriya idarəetməsi', 'Sayt tənzimləmələri']
-            },
-            'komekci': {
-                password: 'help123',
-                name: 'Köməkçi Admin',
-                role: 'helper',
-                permissions: ['Yalnız baxış', 'Elanlara baxma', 'İstifadəçilərə baxma']
-            },
-            'moderator': {
-                password: 'mod123',
-                name: 'Moderator',
-                role: 'moderator',
-                permissions: ['Elan təsdiqi', 'Elan rədd etmə', 'Şərhləri idarəetmə']
+    <!-- Job Detail Modal -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Vakansiya Detalları</h2>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <div id="modalBody"></div>
+            <div class="modal-actions" id="modalActions"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, getDocs, collection, query, where, orderBy, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCiAg-P6g7MDv-xPsraWjHPmUdg-wGYWJU",
+            authDomain: "istap-az.firebaseapp.com",
+            projectId: "istap-az",
+            storageBucket: "istap-az.firebasestorage.app",
+            messagingSenderId: "1014728151709",
+            appId: "1:1014728151709:web:8854f5e32d9812c2bffa74"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        let currentJobId = null;
+        
+        // Check login
+        window.checkLogin = async function() {
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPass').value;
+            const errorDiv = document.getElementById('loginError');
+            
+            if (!email || !password) {
+                errorDiv.textContent = '⚠️ Email və şifrə daxil edin!';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                errorDiv.style.display = 'none';
+            } catch (err) {
+                console.error('Giriş xətası:', err);
+                if (err.code === 'auth/user-not-found') {
+                    errorDiv.textContent = '❌ Bu email ilə istifadəçi tapılmadı. Əvvəlcə qeydiyyatdan keçin!';
+                } else if (err.code === 'auth/wrong-password') {
+                    errorDiv.textContent = '❌ Şifrə yanlışdır!';
+                } else if (err.code === 'auth/invalid-email') {
+                    errorDiv.textContent = '❌ Email formatı yanlışdır!';
+                } else {
+                    errorDiv.textContent = '❌ Xəta: ' + err.message;
+                }
+                errorDiv.style.display = 'block';
             }
         };
         
-        let currentAdmin = null;
-        
-        function checkLogin() {
-            const user = document.getElementById('adminUser').value;
-            const pass = document.getElementById('adminPass').value;
-            
-            if (admins[user] && admins[user].password === pass) {
-                currentAdmin = admins[user];
+        // Auth state listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
                 document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('mainContent').classList.remove('hidden');
-                document.getElementById('adminName').textContent = currentAdmin.name;
-                
-                // İcazələri göstər
-                showPermissions();
-                
-                // Rol əsaslı menyuları göstər/gizlət
-                setupMenuByRole();
+                loadAllData();
             } else {
-                document.getElementById('loginError').style.display = 'block';
+                document.getElementById('loginOverlay').style.display = 'flex';
+                document.getElementById('mainContent').classList.add('hidden');
             }
-        }
+        });
         
-        function showPermissions() {
-            const permList = document.getElementById('permList');
-            permList.innerHTML = '';
-            currentAdmin.permissions.forEach(perm => {
-                const span = document.createElement('span');
-                span.className = 'perm-item';
-                span.textContent = perm;
-                permList.appendChild(span);
-            });
-        }
+        // Logout
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                window.location.reload();
+            } catch (err) {
+                console.error('Çıxış xətası:', err);
+                alert('Çıxış zamanı xəta baş verdi');
+            }
+        };
         
-        function setupMenuByRole() {
-            // Super Admin hər şeyi görür
-            if (currentAdmin.role === 'super') {
-                document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-                document.querySelectorAll('.action-approve').forEach(el => el.classList.remove('hidden'));
-            }
-            // Köməkçi yalnız baxır
-            else if (currentAdmin.role === 'helper') {
-                document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
-                document.querySelectorAll('.action-approve').forEach(el => el.classList.add('hidden'));
-                document.getElementById('menuPending').classList.add('hidden');
-                document.getElementById('menuUsers').classList.add('hidden');
-            }
-            // Moderator elanları idarə edir
-            else if (currentAdmin.role === 'moderator') {
-                document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
-                document.getElementById('menuAdmins').classList.add('hidden');
-                document.getElementById('menuCategories').classList.add('hidden');
-            }
-        }
-        
-        function toggleMenu() {
+        // Toggle menu
+        window.toggleMenu = function() {
             document.getElementById('sidebar').classList.toggle('open');
-        }
+        };
         
-        function showSection(sectionId) {
+        // Show section
+        window.showSection = function(sectionId, element) {
+            // Hide all sections
             document.querySelectorAll('.section-content').forEach(el => el.classList.add('hidden'));
+            // Show selected
             document.getElementById(sectionId).classList.remove('hidden');
             
+            // Update menu active state
             document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            if (element) element.classList.add('active');
+            
+            // Close menu on mobile
+            document.getElementById('sidebar').classList.remove('open');
+            
+            // Reload data for this section
+            if (sectionId === 'pending') loadPendingJobs();
+            if (sectionId === 'approved') loadApprovedJobs();
+            if (sectionId === 'users') loadUsers();
+        };
+        
+        // Load all data
+        async function loadAllData() {
+            await loadStats();
+            await loadRecentJobs();
+            await loadPendingJobs();
+            await loadApprovedJobs();
+            await loadUsers();
         }
         
-        function logout() {
-            location.reload();
-        }
-        
-        // Enter ilə login
-        document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && document.getElementById('loginOverlay').style.display !== 'none') {
-                checkLogin();
+        // Load statistics
+        async function loadStats() {
+            try {
+                // Pending count
+                const pendingQuery = query(collection(db, 'jobs'), where('status', '==', 'pending'));
+                const pendingSnapshot = await getDocs(pendingQuery);
+                const pendingCount = pendingSnapshot.size;
+                document.getElementById('statPending').textContent = pendingCount;
+                document.getElementById('pendingCountBadge').textContent = pendingCount;
+                
+                // Approved count
+                const approvedQuery = query(collection(db, 'jobs'), where('status', '==', 'approved'));
+                const approvedSnapshot = await getDocs(approvedQuery);
+                document.getElementById('statApproved').textContent = approvedSnapshot.size;
+                
+                // Users count
+                const usersSnapshot = await getDocs(collection(db, 'users'));
+                document.getElementById('statUsers').textContent = usersSnapshot.size;
+                
+                // Today count
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                let todayCount = 0;
+                const allJobsSnapshot = await getDocs(collection(db, 'jobs'));
+                allJobsSnapshot.forEach(doc => {
+                    const job = doc.data();
+                    if (job.createdAt && job.createdAt.toDate() >= today) {
+                        todayCount++;
+                    }
+                });
+                document.getElementById('statToday').textContent = todayCount;
+                
+            } catch (err) {
+                console.error('Statistika xətası:', err);
             }
+        }
+        
+        // Load recent jobs
+        async function loadRecentJobs() {
+            try {
+                const q = query(collection(db, 'jobs'), orderBy('createdAt', 'desc'));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    document.getElementById('recentJobsList').innerHTML = '<p style="color: #666; padding: 20px;">Hələ heç bir elan yoxdur.</p>';
+                    return;
+                }
+                
+                let html = '<table><thead><tr><th>Vakansiya</th><th>Şirkət</th><th>Status</th><th>Əməliyyat</th></tr></thead><tbody>';
+                
+                let count = 0;
+                snapshot.forEach((doc) => {
+                    if (count >= 10) return; // Show only last 10
+                    const job = doc.data();
+                    const statusClass = job.status === 'approved' ? 'approved' : (job.status === 'rejected' ? 'rejected' : 'pending');
+                    const statusText = job.status === 'approved' ? 'Təsdiqlənib' : (job.status === 'rejected' ? 'Rədd edilib' : 'Gözləyir');
+                    
+                    html += `
+                        <tr>
+                            <td>${job.title}</td>
+                            <td>${job.company}</td>
+                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                            <td>
+                                <button class="btn btn-view" onclick="viewJob('${doc.id}')">👁 Bax</button>
+                            </td>
+                        </tr>
+                    `;
+                    count++;
+                });
+                
+                html += '</tbody></table>';
+                document.getElementById('recentJobsList').innerHTML = html;
+                
+            } catch (err) {
+                document.getElementById('recentJobsList').innerHTML = '<p style="color: #e74c3c; padding: 20px;">Xəta baş verdi!</p>';
+            }
+        }
+        
+        // Load pending jobs
+        async function loadPendingJobs() {
+            try {
+                const q = query(collection(db, 'jobs'), where('status', '==', 'pending'), orderBy('createdAt', 'desc'));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    document.getElementById('pendingJobsList').innerHTML = '<p style="color: #666; padding: 20px;">Gözləyən elan yoxdur.</p>';
+                    return;
+                }
+                
+                let html = '<table><thead><tr><th>Vakansiya</th><th>Şirkət</th><th>Şəhər</th><th>Tarix</th><th>Əməliyyatlar</th></tr></thead><tbody>';
+                
+                snapshot.forEach((doc) => {
+                    const job = doc.data();
+                    const date = job.createdAt ? new Date(job.createdAt.toDate()).toLocaleDateString('az-AZ') : '-';
+                    
+                    html += `
+                        <tr>
+                            <td>${job.title}</td>
+                            <td>${job.company}</td>
+                            <td>${job.city}</td>
+                            <td>${date}</td>
+                            <td>
+                                <button class="btn btn-view" onclick="viewJob('${doc.id}')">👁</button>
+                                <button class="btn btn-approve" onclick="quickApprove('${doc.id}')">✅</button>
+                                <button class="btn btn-reject" onclick="quickReject('${doc.id}')">❌</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                document.getElementById('pendingJobsList').innerHTML = html;
+                
+            } catch (err) {
+                document.getElementById('pendingJobsList').innerHTML = '<p style="color: #e74c3c; padding: 20px;">Xəta baş verdi!</p>';
+            }
+        }
+        
+        // Load approved jobs
+        async function loadApprovedJobs() {
+            try {
+                const q = query(collection(db, 'jobs'), where('status', '==', 'approved'), orderBy('createdAt', 'desc'));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    document.getElementById('approvedJobsList').innerHTML = '<p style="color: #666; padding: 20px;">Aktiv elan yoxdur.</p>';
+                    return;
+                }
+                
+                let html = '<table><thead><tr><th>Vakansiya</th><th>Şirkət</th><th>Şəhər</th><th>Baxış</th><th>Əməliyyat</th></tr></thead><tbody>';
+                
+                snapshot.forEach((doc) => {
+                    const job = doc.data();
+                    
+                    html += `
+                        <tr>
+                            <td>${job.title}</td>
+                            <td>${job.company}</td>
+                            <td>${job.city}</td>
+                            <td>${job.views || 0}</td>
+                            <td>
+                                <button class="btn btn-view" onclick="viewJob('${doc.id}')">👁 Bax</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                document.getElementById('approvedJobsList').innerHTML = html;
+                
+            } catch (err) {
+                document.getElementById('approvedJobsList').innerHTML = '<p style="color: #e74c3c; padding: 20px;">Xəta baş verdi!</p>';
+            }
+        }
+        
+        // Load users
+        async function loadUsers() {
+            try {
+                const snapshot = await getDocs(collection(db, 'users'));
+                
+                if (snapshot.empty) {
+                    document.getElementById('usersList').innerHTML = '<p style="color: #666; padding: 20px;">İstifadəçi yoxdur.</p>';
+                    return;
+                }
+                
+                let html = '<table><thead><tr><th>Ad Soyad</th><th>Email</th><th>Tip</th><th>Qeydiyyat tarixi</th></tr></thead><tbody>';
+                
+                snapshot.forEach((doc) => {
+                    const user = doc.data();
+                    const date = user.createdAt ? new Date(user.createdAt.toDate()).toLocaleDateString('az-AZ') : '-';
+                    const typeText = user.userType === 'worker' ? '👤 İş axtaran' : '🏢 İşə götürən';
+                    
+                    html += `
+                        <tr>
+                            <td>${user.fullName || '-'}</td>
+                            <td>${user.email}</td>
+                            <td>${typeText}</td>
+                            <td>${date}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                document.getElementById('usersList').innerHTML = html;
+                
+            } catch (err) {
+                document.getElementById('usersList').innerHTML = '<p style="color: #e74c3c; padding: 20px;">Xəta baş verdi!</p>';
+            }
+        }
+        
+        // View job details
+        window.viewJob = async function(jobId) {
+            try {
+                const docRef = doc(db, 'jobs', jobId);
+                const docSnap = await getDoc(docRef);
+                
+                if (!docSnap.exists()) {
+                    alert('Elan tapılmadı!');
+                    return;
+                }
+                
+                const job = docSnap.data();
+                currentJobId = jobId;
+                
+                const date = job.createdAt ? new Date(job.createdAt.toDate()).toLocaleString('az-AZ') : '-';
+                const statusClass = job.status === 'approved' ? 'approved' : (job.status === 'rejected' ? 'rejected' : 'pending');
+                const statusText = job.status === 'approved' ? '✅ Təsdiqlənib' : (job.status === 'rejected' ? '❌ Rədd edilib' : '⏳ Gözləyir');
+                
+                document.getElementById('modalTitle').textContent = job.title;
+                document.getElementById('modalBody').innerHTML = `
+                    <div class="detail-row">
+                        <label>🏢 Şirkət:</label>
+                        <div class="value">${job.company}</div>
+                    </div>
+                    <div class="detail-row">
+                        <label>📁 Kateqoriya:</label>
+                        <div class="value">${job.category}</div>
+                    </div>
+                    <div class="detail-row">
+                        <label>📍 Şəhər:</label>
+                        <div class="value">${job.city}</div>
+                    </div>
+                    <div class="detail-row">
+                        <label>💰 Əmək haqqı:</label>
+                        <div class="value">${job.salary}</div>
+                    </div>
+                    <div class="detail-row">
+                        <label>📞 Əlaqə:</label>
+                        <div class="value">
+                            📱 Telefon: ${job.phone}<br>
+                            📧 Email: ${job.email || 'Yazılmayıb'}
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <label>📝 Təsvir:</label>
+                        <div class="value"><pre>${job.description}</pre></div>
+                    </div>
+                    <div class="detail-row">
+                        <label>📊 Status:</label>
+                        <div class="value"><span class="status-badge ${statusClass}">${statusText}</span></div>
+                    </div>
+                    <div class="detail-row">
+                        <label>📅 Əlavə edilib:</label>
+                        <div class="value">${date}</div>
+                    </div>
+                    <div class="detail-row">
+                        <label>👤 Əlavə edən:</label>
+                        <div class="value">${job.userEmail || 'Naməlum'}</div>
+                    </div>
+                `;
+                
+                // Action buttons
+                let buttons = '';
+                if (job.status === 'pending') {
+                    buttons = `
+                        <button class="btn btn-approve" onclick="approveJob('${jobId}')">✅ Təsdiqlə</button>
+                        <button class="btn btn-reject" onclick="rejectJob('${jobId}')">❌ Rədd et</button>
+                    `;
+                } else if (job.status === 'approved') {
+                    buttons = `
+                        <button class="btn btn-reject" onclick="rejectJob('${jobId}')">⏪ Gözləyənə qaytar</button>
+                    `;
+                } else if (job.status === 'rejected') {
+                    buttons = `
+                        <button class="btn btn-approve" onclick="approveJob('${jobId}')">✅ Təsdiqlə</button>
+                    `;
+                }
+                
+                document.getElementById('modalActions').innerHTML = buttons + `
+                    <button class="btn btn-view" onclick="closeModal()" style="margin-left: auto;">Bağla</button>
+                `;
+                
+                document.getElementById('jobModal').classList.add('show');
+                
+            } catch (err) {
+                alert('Xəta: ' + err.message);
+            }
+        };
+        
+        // Close modal
+        window.closeModal = function() {
+            document.getElementById('jobModal').classList.remove('show');
+            currentJobId = null;
+        };
+        
+        // Quick approve
+        window.quickApprove = async function(jobId) {
+            if (!confirm('Bu elanı təsdiqləmək istəyirsiniz?')) return;
+            
+            try {
+                await updateDoc(doc(db, 'jobs', jobId), { 
+                    status: 'approved',
+                    approvedAt: new Date()
+                });
+                alert('✅ Elan təsdiq edildi!');
+                loadAllData();
+            } catch (err) {
+                alert('❌ Xəta: ' + err.message);
+            }
+        };
+        
+        // Quick reject
+        window.quickReject = async function(jobId) {
+            if (!confirm('Bu elanı rədd etmək istəyirsiniz?')) return;
+            
+            try {
+                await updateDoc(doc(db, 'jobs', jobId), { 
+                    status: 'rejected',
+                    rejectedAt: new Date()
+                });
+                alert('❌ Elan rədd edildi!');
+                loadAllData();
+            } catch (err) {
+                alert('❌ Xəta: ' + err.message);
+            }
+        };
+        
+        // Approve from modal
+        window.approveJob = async function(jobId) {
+            await quickApprove(jobId);
+            closeModal();
+        };
+        
+        // Reject from modal
+        window.rejectJob = async function(jobId) {
+            await quickReject(jobId);
+            closeModal();
+        };
+        
+        // Close modal on outside click
+        document.getElementById('jobModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // Enter key on login
+        document.getElementById('adminPass').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkLogin();
         });
     </script>
 </body>
