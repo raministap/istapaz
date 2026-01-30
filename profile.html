@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilim - İşTap.az</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        
+        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; }
+        .nav { background: #1557b0; padding: 10px; text-align: center; }
+        .nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 14px; }
+        
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        
+        .profile-header { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
+        .avatar { width: 100px; height: 100px; background: #1a73e8; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        .profile-info h2 { color: #333; margin-bottom: 5px; }
+        .profile-info p { color: #666; margin-bottom: 5px; }
+        .badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 12px; margin-top: 10px; }
+        .badge-seeker { background: #e3f2fd; color: #1976d2; }
+        .badge-employer { background: #f3e5f5; color: #7b1fa2; }
+        .edit-btn { background: #1a73e8; color: white; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; margin-left: auto; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; }
+        .stat-number { font-size: 32px; font-weight: bold; color: #1a73e8; }
+        .stat-label { color: #666; margin-top: 5px; font-size: 14px; }
+        
+        .content-grid { display: grid; grid-template-columns: 1fr 3fr; gap: 20px; }
+        @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } }
+        
+        .sidebar { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); height: fit-content; }
+        .sidebar h3 { margin-bottom: 15px; color: #333; padding-bottom: 10px; border-bottom: 2px solid #1a73e8; }
+        .menu-list { list-style: none; }
+        .menu-list li { padding: 12px; cursor: pointer; border-radius: 5px; margin-bottom: 5px; transition: background 0.3s; }
+        .menu-list li:hover, .menu-list li.active { background: #e3f2fd; color: #1a73e8; }
+        
+        .main-content { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .section-title { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #1a73e8; }
+        
+        .job-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .job-item:last-child { border-bottom: none; }
+        .job-info h4 { color: #1a73e8; margin-bottom: 5px; }
+        .job-info p { color: #666; font-size: 14px; }
+        .job-status { padding: 5px 12px; border-radius: 15px; font-size: 12px; }
+        .status-active { background: #d4edda; color: #155724; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .btn-small { padding: 5px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 5px; }
+        .btn-view { background: #17a2b8; color: white; }
+        .btn-delete { background: #dc3545; color: white; }
+        
+        .saved-item { display: flex; gap: 15px; padding: 15px; border-bottom: 1px solid #eee; }
+        .company-logo { width: 50px; height: 50px; background: #e3f2fd; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .saved-info { flex: 1; }
+        .saved-info h4 { color: #1a73e8; margin-bottom: 3px; }
+        .saved-info p { color: #666; font-size: 13px; margin-bottom: 3px; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #555; font-weight: bold; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        .btn-save { background: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        
+        .hidden { display: none !important; }
+        .loading { text-align: center; padding: 40px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>İşTap.az</h1>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html">Ana səhifə</a>
+        <a href="add-job.html">+ Vakansiya əlavə et</a>
+        <a href="profile.html">Profilim</a>
+        <a href="#" onclick="logout()">Çıxış</a>
+    </div>
+    
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar" id="userAvatar">👤</div>
+            <div class="profile-info">
+                <h2 id="userName">Yüklənir...</h2>
+                <p id="userEmail">...</p>
+                <p id="userPhone">...</p>
+                <span class="badge" id="userType">...</span>
+            </div>
+            <button class="edit-btn" onclick="showSection('settings')">✏️ Profili düzənlə</button>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="statSaved">0</div>
+                <div class="stat-label">Saxlanmış vakansiya</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="statApplied">0</div>
+                <div class="stat-label">Müraciət etdiyim</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="statMyJobs">0</div>
+                <div class="stat-label">Elanlarım</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="statViews">0</div>
+                <div class="stat-label">Profil baxışı</div>
+            </div>
+        </div>
+        
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <h3>📋 Menyu</h3>
+                <ul class="menu-list">
+                    <li class="active" onclick="showSection('saved', this)">⭐ Saxlanmışlar</li>
+                    <li onclick="showSection('applications', this)">📨 Müraciətlərim</li>
+                    <li onclick="showSection('myjobs', this)">📋 Elanlarım</li>
+                    <li onclick="showSection('settings', this)">⚙️ Tənzimləmələr</li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Saved Jobs -->
+                <div id="saved" class="content-section">
+                    <h3 class="section-title">⭐ Saxlanmış vakansiyalar</h3>
+                    <div id="savedList">
+                        <p class="loading">Yüklənir...</p>
+                    </div>
+                </div>
+                
+                <!-- Applications -->
+                <div id="applications" class="content-section hidden">
+                    <h3 class="section-title">📨 Müraciətlərim</h3>
+                    <div id="applicationsList">
+                        <p class="loading">Yüklənir...</p>
+                    </div>
+                </div>
+                
+                <!-- My Jobs -->
+                <div id="myjobs" class="content-section hidden">
+                    <h3 class="section-title">📋 Elanlarım</h3>
+                    <div id="myJobsList">
+                        <p class="loading">Yüklənir...</p>
+                    </div>
+                </div>
+                
+                <!-- Settings -->
+                <div id="settings" class="content-section hidden">
+                    <h3 class="section-title">⚙️ Profil tənzimləmələri</h3>
+                    <form id="profileForm" onsubmit="saveProfile(event)">
+                        <div class="form-group">
+                            <label>Ad Soyad</label>
+                            <input type="text" id="editName" placeholder="Ad Soyad">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefon</label>
+                            <input type="tel" id="editPhone" placeholder="050 123 45 67">
+                        </div>
+                        <div class="form-group">
+                            <label>Şəhər</label>
+                            <select id="editCity">
+                                <option value="">-- Seç --</option>
+                                <option>Bakı</option>
+                                <option>Sumqayıt</option>
+                                <option>Gəncə</option>
+                                <option>Şəki</option>
+                                <option>Quba</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Haqqımda</label>
+                            <textarea id="editAbout" rows="4" placeholder="Özünüz haqqında qısa məlumat..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-save">💾 Yadda saxla</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, getDocs, collection, query, where, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCiAg-P6g7MDv-xPsraWjHPmUdg-wGYWJU",
+            authDomain: "istap-az.firebaseapp.com",
+            projectId: "istap-az",
+            storageBucket: "istap-az.firebasestorage.app",
+            messagingSenderId: "1014728151709",
+            appId: "1:1014728151709:web:8854f5e32d9812c2bffa74"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        let currentUser = null;
+        let userData = null;
+        
+        // Auth state listener
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = user;
+            
+            // Load user data from Firestore
+            await loadUserData(user.uid);
+            
+            // Load user stats
+            await loadUserStats(user.uid);
+            
+            // Load saved jobs
+            await loadSavedJobs();
+            
+            // Load my jobs
+            await loadMyJobs(user.uid);
+        });
+        
+        // Load user data
+        async function loadUserData(uid) {
+            try {
+                const q = query(collection(db, 'users'), where('uid', '==', uid));
+                const snapshot = await getDocs(q);
+                
+                if (!snapshot.empty) {
+                    userData = snapshot.docs[0].data();
+                    const docId = snapshot.docs[0].id;
+                    
+                    // Display user info
+                    document.getElementById('userName').textContent = userData.fullName || 'Ad Soyad';
+                    document.getElementById('userEmail').textContent = userData.email || currentUser.email;
+                    document.getElementById('userPhone').textContent = userData.phone || 'Telefon nömrəsi əlavə edilməyib';
+                    
+                    // User type badge
+                    const typeBadge = document.getElementById('userType');
+                    if (userData.userType === 'employer') {
+                        typeBadge.textContent = '🏢 İşə götürən';
+                        typeBadge.className = 'badge badge-employer';
+                    } else {
+                        typeBadge.textContent = '👤 İş axtaran';
+                        typeBadge.className = 'badge badge-seeker';
+                    }
+                    
+                    // Fill edit form
+                    document.getElementById('editName').value = userData.fullName || '';
+                    document.getElementById('editPhone').value = userData.phone || '';
+                    document.getElementById('editCity').value = userData.city || '';
+                    document.getElementById('editAbout').value = userData.about || '';
+                    
+                } else {
+                    document.getElementById('userName').textContent = currentUser.email;
+                    document.getElementById('userEmail').textContent = currentUser.email;
+                }
+                
+            } catch (err) {
+                console.error('İstifadəçi məlumatı yükləmə xətası:', err);
+            }
+        }
+        
+        // Load user stats
+        async function loadUserStats(uid) {
+            try {
+                // My jobs count
+                const myJobsQuery = query(collection(db, 'jobs'), where('userId', '==', uid));
+                const myJobsSnapshot = await getDocs(myJobsQuery);
+                document.getElementById('statMyJobs').textContent = myJobsSnapshot.size;
+                
+                // For now, other stats are mock (will implement later)
+                document.getElementById('statSaved').textContent = '0';
+                document.getElementById('statApplied').textContent = '0';
+                document.getElementById('statViews').textContent = '0';
+                
+            } catch (err) {
+                console.error('Statistika yükləmə xətası:', err);
+            }
+        }
+        
+        // Load saved jobs (mock for now)
+        async function loadSavedJobs() {
+            document.getElementById('savedList').innerHTML = '<p style="color: #666; padding: 20px;">Hələ saxlanmış vakansiya yoxdur.</p>';
+        }
+        
+        // Load my jobs
+        async function loadMyJobs(uid) {
+            try {
+                const q = query(collection(db, 'jobs'), where('userId', '==', uid), orderBy('createdAt', 'desc'));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    document.getElementById('myJobsList').innerHTML = '<p style="color: #666; padding: 20px;">Hələ elanınız yoxdur.</p>';
+                    return;
+                }
+                
+                let html = '';
+                snapshot.forEach((doc) => {
+                    const job = doc.data();
+                    const date = job.createdAt ? new Date(job.createdAt.toDate()).toLocaleDateString('az-AZ') : '-';
+                    const statusClass = job.status === 'approved' ? 'status-active' : 'status-pending';
+                    const statusText = job.status === 'approved' ? 'Aktiv' : 'Gözləyir';
+                    
+                    html += `
+                        <div class="job-item">
+                            <div class="job-info">
+                                <h4>${job.title}</h4>
+                                <p>${job.company} • ${job.city} • ${date}</p>
+                                <span class="job-status ${statusClass}">${statusText}</span>
+                            </div>
+                            <div>
+                                <button class="btn-small btn-view" onclick="location.href='job-detail.html?id=${doc.id}'">Bax</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('myJobsList').innerHTML = html;
+                
+            } catch (err) {
+                document.getElementById('myJobsList').innerHTML = '<p style="color: #e74c3c; padding: 20px;">Xəta baş verdi!</p>';
+            }
+        }
+        
+        // Show section
+        window.showSection = function(sectionId, element) {
+            document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            document.querySelectorAll('.menu-list li').forEach(el => el.classList.remove('active'));
+            if (element) element.classList.add('active');
+        };
+        
+        // Save profile
+        window.saveProfile = async function(event) {
+            event.preventDefault();
+            
+            if (!currentUser || !userData) return;
+            
+            const name = document.getElementById('editName').value;
+            const phone = document.getElementById('editPhone').value;
+            const city = document.getElementById('editCity').value;
+            const about = document.getElementById('editAbout').value;
+            
+            try {
+                // Find user document
+                const q = query(collection(db, 'users'), where('uid', '==', currentUser.uid));
+                const snapshot = await getDocs(q);
+                
+                if (!snapshot.empty) {
+                    const docRef = doc(db, 'users', snapshot.docs[0].id);
+                    await updateDoc(docRef, {
+                        fullName: name,
+                        phone: phone,
+                        city: city,
+                        about: about,
+                        updatedAt: new Date()
+                    });
+                    
+                    alert('✅ Profil yeniləndi!');
+                    location.reload();
+                }
+                
+            } catch (err) {
+                alert('❌ Xəta: ' + err.message);
+            }
+        };
+        
+        // Logout
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'index.html';
+            } catch (err) {
+                console.error('Çıxış xətası:', err);
+            }
+        };
+    </script>
+</body>
+</html>
