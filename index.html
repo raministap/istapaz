@@ -2,11 +2,225 @@
 <html lang="az">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=src/index.html">
-    <title>İşTap.az</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İşTap.az - Azərbaycanın iş elanları saytı</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        .header { background: #1a73e8; color: white; padding: 15px; text-align: center; }
+        .nav { background: #1557b0; padding: 10px; text-align: center; }
+        .nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 14px; }
+        .user-info { color: #fff; font-size: 12px; margin-top: 5px; }
+        .search-section { background: #1a73e8; padding: 30px 15px; text-align: center; }
+        .search-box { max-width: 800px; margin: 0 auto; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .search-box input, .search-box select { padding: 12px; border: none; border-radius: 5px; font-size: 16px; }
+        .search-box input { flex: 1; min-width: 200px; }
+        .search-box select { min-width: 150px; }
+        .search-box button { padding: 12px 30px; background: #ff6b00; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .categories { padding: 30px 15px; max-width: 1200px; margin: 0 auto; }
+        .categories h2 { margin-bottom: 20px; color: #333; }
+        .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .cat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; }
+        .cat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .cat-card h3 { color: #1a73e8; margin-bottom: 10px; font-size: 16px; }
+        .cat-card p { color: #666; font-size: 13px; }
+        .cat-count { color: #ff6b00; font-weight: bold; float: right; }
+        .jobs { padding: 20px 15px; max-width: 800px; margin: 0 auto; }
+        .jobs h2 { margin-bottom: 20px; color: #333; }
+        .job-card { background: white; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .job-title { color: #1a73e8; font-size: 18px; font-weight: bold; margin-bottom: 5px; cursor: pointer; }
+        .job-company { color: #555; margin-bottom: 10px; }
+        .job-info { color: #777; font-size: 14px; display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
+        .job-salary { color: #28a745; font-weight: bold; }
+        .btn { background: #1a73e8; color: white; padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        .loading { text-align: center; padding: 20px; color: #666; }
+        .no-jobs { text-align: center; padding: 40px; color: #666; }
+    </style>
 </head>
 <body>
-    <p>Yönləndirilir...</p>
-    <a href="src/index.html">Əgər avtomatik yönləndirmə işləməsə, bura basın</a>
+    <div class="header">
+        <h1>İşTap.az</h1>
+        <p>Azərbaycanın iş elanları saytı</p>
+        <div class="user-info" id="userInfo"></div>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html">Ana səhifə</a>
+        <a href="add-job.html">+ Vakansiya əlavə et</a>
+        <a href="login.html" id="loginLink">Giriş</a>
+        <a href="#" onclick="logout()" id="logoutLink" style="display:none;">Çıxış</a>
+    </div>
+    
+    <div class="search-section">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Vakansiya axtar...">
+            <select id="searchCategory">
+                <option value="">Bütün kateqoriyalar</option>
+                <option>Satış</option>
+                <option>Tikinti və təmir</option>
+                <option>Sürücülük və logistika</option>
+                <option>Restoran və xidmət</option>
+                <option>IT və texnologiya</option>
+                <option>Mühasibatlıq və maliyyə</option>
+                <option>Təhsil və tibb</option>
+                <option>İnzibati və ofis</option>
+            </select>
+            <button onclick="searchJobs()">Axtar</button>
+        </div>
+    </div>
+    
+    <div class="categories">
+        <h2>Populyar kateqoriyalar</h2>
+        <div class="cat-grid">
+            <div class="cat-card" onclick="filterByCategory('Satış')">
+                <h3>Satış <span class="cat-count">0 elan</span></h3>
+                <p>Satıcı, kassir, daşınmaz əmlak agenti, satış meneceri</p>
+            </div>
+            <div class="cat-card" onclick="filterByCategory('Tikinti və təmir')">
+                <h3>Tikinti <span class="cat-count">0 elan</span></h3>
+                <p>Fəhlə, plastik pəncərə ustası, elektrik, santexnik</p>
+            </div>
+            <div class="cat-card" onclick="filterByCategory('Sürücülük və logistika')">
+                <h3>Sürücülük <span class="cat-count">0 elan</span></h3>
+                <p>Sürücü, kuryer, sürücü-kuryer, taksi şəxsi</p>
+            </div>
+            <div class="cat-card" onclick="filterByCategory('IT və texnologiya')">
+                <h3>IT <span class="cat-count">0 elan</span></h3>
+                <p>Proqramçı, dizayner, SMM menecer</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="jobs">
+        <h2>Son vakansiyalar</h2>
+        <div id="jobsList">
+            <div class="loading">⏳ Vakansiyalar yüklənir...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, getDocs, collection, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCiAg-P6g7MDv-xPsraWjHPmUdg-wGYWJU",
+            authDomain: "istap-az.firebaseapp.com",
+            projectId: "istap-az",
+            storageBucket: "istap-az.firebasestorage.app",
+            messagingSenderId: "1014728151709",
+            appId: "1:1014728151709:web:8854f5e32d9812c2bffa74"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        let allJobs = [];
+        
+        onAuthStateChanged(auth, (user) => {
+            const userInfo = document.getElementById('userInfo');
+            const loginLink = document.getElementById('loginLink');
+            const logoutLink = document.getElementById('logoutLink');
+            
+            if (user) {
+                userInfo.textContent = `👤 ${user.email}`;
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline';
+            } else {
+                userInfo.textContent = '';
+                loginLink.style.display = 'inline';
+                logoutLink.style.display = 'none';
+            }
+        });
+        
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                window.location.reload();
+            } catch (err) {
+                console.error('Çıxış xətası:', err);
+            }
+        };
+        
+        async function loadJobs() {
+            const jobsList = document.getElementById('jobsList');
+            
+            try {
+                const q = query(collection(db, 'jobs'), where('status', '==', 'approved'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                allJobs = [];
+                
+                querySnapshot.forEach((doc) => {
+                    const job = doc.data();
+                    job.id = doc.id;
+                    allJobs.push(job);
+                });
+                
+                displayJobs(allJobs);
+                
+            } catch (err) {
+                console.error('Yükləmə xətası:', err);
+                jobsList.innerHTML = '<div class="no-jobs">❌ Vakansiyalar yüklənərkən xəta baş verdi</div>';
+            }
+        }
+        
+        function displayJobs(jobs) {
+            const jobsList = document.getElementById('jobsList');
+            
+            if (jobs.length === 0) {
+                jobsList.innerHTML = '<div class="no-jobs">📭 Hazırda aktiv vakansiya yoxdur</div>';
+                return;
+            }
+            
+            let html = '';
+            jobs.forEach(job => {
+                const date = job.createdAt ? new Date(job.createdAt.toDate()).toLocaleDateString('az-AZ') : '';
+                
+                html += `
+                    <div class="job-card">
+                        <div class="job-title" onclick="location.href='job-detail.html?id=${job.id}'">${job.title}</div>
+                        <div class="job-company">${job.company}</div>
+                        <div class="job-info">
+                            <span>📍 ${job.city}</span>
+                            <span class="job-salary">💰 ${job.salary}</span>
+                            <span>🏷️ ${job.category}</span>
+                            <span>📅 ${date}</span>
+                        </div>
+                        <button class="btn" onclick="location.href='job-detail.html?id=${job.id}'">Ətraflı</button>
+                    </div>
+                `;
+            });
+            
+            jobsList.innerHTML = html;
+        }
+        
+        window.searchJobs = function() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('searchCategory').value;
+            
+            let filtered = allJobs;
+            
+            if (searchText) {
+                filtered = filtered.filter(job => 
+                    job.title.toLowerCase().includes(searchText) ||
+                    job.company.toLowerCase().includes(searchText)
+                );
+            }
+            
+            if (category) {
+                filtered = filtered.filter(job => job.category === category);
+            }
+            
+            displayJobs(filtered);
+        };
+        
+        window.filterByCategory = function(category) {
+            document.getElementById('searchCategory').value = category;
+            searchJobs();
+        };
+        
+        loadJobs();
+    </script>
 </body>
 </html>
