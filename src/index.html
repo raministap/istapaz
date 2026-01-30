@@ -12,7 +12,7 @@
         .header { background: #1a73e8; color: white; padding: 15px; text-align: center; }
         .nav { background: #1557b0; padding: 10px; text-align: center; }
         .nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 14px; }
-        .nav a:hover { text-decoration: underline; }
+        .user-info { color: #fff; font-size: 12px; margin-top: 5px; }
         
         /* Axtarış bölməsi */
         .search-section { background: #1a73e8; padding: 30px 15px; text-align: center; }
@@ -36,10 +36,14 @@
         .jobs { padding: 20px 15px; max-width: 800px; margin: 0 auto; }
         .jobs h2 { margin-bottom: 20px; color: #333; }
         .job-card { background: white; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .job-title { color: #1a73e8; font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+        .job-title { color: #1a73e8; font-size: 18px; font-weight: bold; margin-bottom: 5px; cursor: pointer; }
+        .job-title:hover { text-decoration: underline; }
         .job-company { color: #555; margin-bottom: 10px; }
-        .job-info { color: #777; font-size: 14px; display: flex; gap: 15px; flex-wrap: wrap; }
-        .btn { background: #1a73e8; color: white; padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        .job-info { color: #777; font-size: 14px; display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
+        .job-salary { color: #28a745; font-weight: bold; }
+        .btn { background: #1a73e8; color: white; padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        .loading { text-align: center; padding: 20px; color: #666; }
+        .no-jobs { text-align: center; padding: 40px; color: #666; }
     </style>
 </head>
 <body>
@@ -47,20 +51,22 @@
     <div class="header">
         <h1>İşTap.az</h1>
         <p>Azərbaycanın iş elanları saytı</p>
+        <div class="user-info" id="userInfo"></div>
     </div>
     
     <!-- Navigasiya -->
     <div class="nav">
         <a href="index.html">Ana səhifə</a>
         <a href="add-job.html">+ Vakansiya əlavə et</a>
-        <a href="login.html">Giriş</a>
+        <a href="login.html" id="loginLink">Giriş</a>
+        <a href="#" onclick="logout()" id="logoutLink" style="display:none;">Çıxış</a>
     </div>
     
     <!-- Axtarış -->
     <div class="search-section">
         <div class="search-box">
-            <input type="text" placeholder="Vakansiya axtar...">
-            <select>
+            <input type="text" id="searchInput" placeholder="Vakansiya axtar...">
+            <select id="searchCategory">
                 <option value="">Bütün kateqoriyalar</option>
                 <option>Satış</option>
                 <option>Tikinti və təmir</option>
@@ -71,7 +77,7 @@
                 <option>Təhsil və tibb</option>
                 <option>İnzibati və ofis</option>
             </select>
-            <button>Axtar</button>
+            <button onclick="searchJobs()">Axtar</button>
         </div>
     </div>
     
@@ -79,77 +85,182 @@
     <div class="categories">
         <h2>Populyar kateqoriyalar</h2>
         <div class="cat-grid">
-            <div class="cat-card" onclick="location.href='add-job.html'" style="cursor: pointer;">
-                <h3>Satış <span class="cat-count">1,234 elan</span></h3>
-                <p>Satıcı, kassir, daşınmaz əmlak agenti, satış meneceri, satış təmsilçisi</p>
+            <div class="cat-card" onclick="filterByCategory('Satış')">
+                <h3>Satış <span class="cat-count" id="count-Satış">0 elan</span></h3>
+                <p>Satıcı, kassir, daşınmaz əmlak agenti, satış meneceri</p>
             </div>
-            <div class="cat-card">
-                <h3>Tikinti və təmir <span class="cat-count">892 elan</span></h3>
-                <p>Fəhlə, plastik pəncərə ustası, elektrik, santexnik, mebel ustası</p>
+            <div class="cat-card" onclick="filterByCategory('Tikinti və təmir')">
+                <h3>Tikinti <span class="cat-count" id="count-Tikinti">0 elan</span></h3>
+                <p>Fəhlə, plastik pəncərə ustası, elektrik, santexnik</p>
             </div>
-            <div class="cat-card">
-                <h3>Sürücülük və logistika <span class="cat-count">567 elan</span></h3>
+            <div class="cat-card" onclick="filterByCategory('Sürücülük və logistika')">
+                <h3>Sürücülük <span class="cat-count" id="count-Sürücülük">0 elan</span></h3>
                 <p>Sürücü, kuryer, sürücü-kuryer, taksi şəxsi</p>
             </div>
-            <div class="cat-card">
-                <h3>Restoran və xidmət <span class="cat-count">445 elan</span></h3>
-                <p>Ofisiant, barmen, aşpaz, xadimə, hostes</p>
-            </div>
-            <div class="cat-card">
-                <h3>IT və texnologiya <span class="cat-count">323 elan</span></h3>
-                <p>Proqramçı, dizayner, SMM menecer, data analitik</p>
-            </div>
-            <div class="cat-card">
-                <h3>Mühasibatlıq və maliyyə <span class="cat-count">234 elan</span></h3>
-                <p>Mühasib, mühasib köməkçisi, vergi uçotu meneceri</p>
-            </div>
-            <div class="cat-card">
-                <h3>Təhsil və tibb <span class="cat-count">198 elan</span></h3>
-                <p>Müəllim, təlimçi, təbib, tibb bacısı, psixoloq</p>
-            </div>
-            <div class="cat-card">
-                <h3>İnzibati və ofis <span class="cat-count">156 elan</span></h3>
-                <p>Ofis meneceri, sekretar, operator, tərcüməçi, HR</p>
+            <div class="cat-card" onclick="filterByCategory('IT və texnologiya')">
+                <h3>IT <span class="cat-count" id="count-IT">0 elan</span></h3>
+                <p>Proqramçı, dizayner, SMM menecer</p>
             </div>
         </div>
     </div>
     
-    <!-- Son vakansiyalar -->
+    <!-- Vakansiyalar -->
     <div class="jobs">
         <h2>Son vakansiyalar</h2>
-        
-        <div class="job-card">
-            <div class="job-title">Frontend Developer</div>
-            <div class="job-company">Tech Solutions LLC</div>
-            <div class="job-info">
-                <span>📍 Bakı</span>
-                <span>💰 2000-3000 AZN</span>
-                <span>🏷️ IT və texnologiya</span>
-            </div>
-            <button class="btn">Ətraflı</button>
-        </div>
-        
-        <div class="job-card">
-            <div class="job-title">Satış Meneceri</div>
-            <div class="job-company">Grand Market</div>
-            <div class="job-info">
-                <span>📍 Sumqayıt</span>
-                <span>💰 800-1200 AZN</span>
-                <span>🏷️ Satış</span>
-            </div>
-            <button class="btn">Ətraflı</button>
-        </div>
-        
-        <div class="job-card">
-            <div class="job-title">Sürücü-kuryer</div>
-            <div class="job-company">Express Logistics</div>
-            <div class="job-info">
-                <span>📍 Bakı</span>
-                <span>💰 600-900 AZN</span>
-                <span>🏷️ Sürücülük və logistika</span>
-            </div>
-            <button class="btn">Ətraflı</button>
+        <div id="jobsList">
+            <div class="loading">⏳ Vakansiyalar yüklənir...</div>
         </div>
     </div>
+
+    <script type="module">
+        import { auth, db, getDocs, collection, query, where, orderBy, onAuthStateChanged, signOut } from './firebase-config.js';
+        
+        let allJobs = [];
+        let currentUser = null;
+        
+        // İstifadəçi vəziyyətini yoxla
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            const userInfo = document.getElementById('userInfo');
+            const loginLink = document.getElementById('loginLink');
+            const logoutLink = document.getElementById('logoutLink');
+            
+            if (user) {
+                userInfo.textContent = `👤 ${user.email}`;
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline';
+            } else {
+                userInfo.textContent = '';
+                loginLink.style.display = 'inline';
+                logoutLink.style.display = 'none';
+            }
+        });
+        
+        // Çıxış funksiyası
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                window.location.reload();
+            } catch (err) {
+                console.error('Çıxış xətası:', err);
+            }
+        };
+        
+        // Vakansiyaları yüklə
+        async function loadJobs() {
+            const jobsList = document.getElementById('jobsList');
+            
+            try {
+                // Təsdiqlənmiş vakansiyaları çək (status: 'approved')
+                const q = query(
+                    collection(db, 'jobs'), 
+                    where('status', '==', 'approved'),
+                    orderBy('createdAt', 'desc')
+                );
+                
+                const querySnapshot = await getDocs(q);
+                allJobs = [];
+                
+                querySnapshot.forEach((doc) => {
+                    const job = doc.data();
+                    job.id = doc.id;
+                    allJobs.push(job);
+                });
+                
+                displayJobs(allJobs);
+                updateCategoryCounts();
+                
+            } catch (err) {
+                console.error('Yükləmə xətası:', err);
+                jobsList.innerHTML = '<div class="no-jobs">❌ Vakansiyalar yüklənərkən xəta baş verdi</div>';
+            }
+        }
+        
+        // Vakansiyaları göstər
+        function displayJobs(jobs) {
+            const jobsList = document.getElementById('jobsList');
+            
+            if (jobs.length === 0) {
+                jobsList.innerHTML = '<div class="no-jobs">📭 Hazırda aktiv vakansiya yoxdur</div>';
+                return;
+            }
+            
+            let html = '';
+            jobs.forEach(job => {
+                const date = job.createdAt ? new Date(job.createdAt.toDate()).toLocaleDateString('az-AZ') : '';
+                
+                html += `
+                    <div class="job-card">
+                        <div class="job-title" onclick="viewJob('${job.id}')">${job.title}</div>
+                        <div class="job-company">${job.company}</div>
+                        <div class="job-info">
+                            <span>📍 ${job.city}</span>
+                            <span class="job-salary">💰 ${job.salary}</span>
+                            <span>🏷️ ${job.category}</span>
+                            <span>📅 ${date}</span>
+                        </div>
+                        <button class="btn" onclick="viewJob('${job.id}')">Ətraflı</button>
+                    </div>
+                `;
+            });
+            
+            jobsList.innerHTML = html;
+        }
+        
+        // Kateqoriya saylarını yenilə
+        function updateCategoryCounts() {
+            const counts = {};
+            
+            allJobs.forEach(job => {
+                if (!counts[job.category]) counts[job.category] = 0;
+                counts[job.category]++;
+            });
+            
+            // Sayları göstər
+            document.getElementById('count-Satış').textContent = (counts['Satış'] || 0) + ' elan';
+            document.getElementById('count-Tikinti').textContent = (counts['Tikinti və təmir'] || 0) + ' elan';
+            document.getElementById('count-Sürücülük').textContent = (counts['Sürücülük və logistika'] || 0) + ' elan';
+            document.getElementById('count-IT').textContent = (counts['IT və texnologiya'] || 0) + ' elan';
+        }
+        
+        // Axtarış funksiyası
+        window.searchJobs = function() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('searchCategory').value;
+            
+            let filtered = allJobs;
+            
+            // Mətn axtarışı
+            if (searchText) {
+                filtered = filtered.filter(job => 
+                    job.title.toLowerCase().includes(searchText) ||
+                    job.company.toLowerCase().includes(searchText) ||
+                    job.description.toLowerCase().includes(searchText)
+                );
+            }
+            
+            // Kateqoriya filtri
+            if (category) {
+                filtered = filtered.filter(job => job.category === category);
+            }
+            
+            displayJobs(filtered);
+        };
+        
+        // Kateqoriyaya görə filtrlə
+        window.filterByCategory = function(category) {
+            document.getElementById('searchCategory').value = category;
+            searchJobs();
+        };
+        
+        // Vakansiya detallarına bax
+        window.viewJob = function(jobId) {
+            // Sonra job-detail.html ilə əlaqələndirəcəyik
+            alert('Vakansiya ID: ' + jobId + '\n(Detallar səhifəsi tezliklə əlavə ediləcək)');
+        };
+        
+        // Səhifə yüklənəndə vakansiyaları çək
+        loadJobs();
+    </script>
 </body>
 </html>
