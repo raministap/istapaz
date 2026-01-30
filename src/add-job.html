@@ -18,10 +18,13 @@
         textarea { min-height: 100px; resize: vertical; }
         button { width: 100%; padding: 15px; background: #1a73e8; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; }
         button:hover { background: #1557b0; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
         .back { text-align: center; margin-top: 15px; }
         .back a { color: #1a73e8; text-decoration: none; }
         .hint { color: #999; font-size: 12px; margin-bottom: 10px; }
-        .subcat { margin-left: 20px; color: #666; font-size: 13px; }
+        .error { color: #e74c3c; margin-top: 10px; text-align: center; display: none; }
+        .success { color: #27ae60; margin-top: 10px; text-align: center; display: none; }
+        .loading { display: none; text-align: center; margin-top: 10px; color: #666; }
     </style>
 </head>
 <body>
@@ -40,22 +43,22 @@
             <h2>Yeni Vakansiya</h2>
             
             <label>Vakansiya adı *</label>
-            <input type="text" placeholder="Məs: Frontend Developer, Satıcı, Sürücü">
+            <input type="text" id="title" placeholder="Məs: Frontend Developer, Satıcı, Sürücü">
             
             <label>Şirkət adı *</label>
-            <input type="text" placeholder="Məs: Tech Solutions MMC">
+            <input type="text" id="company" placeholder="Məs: Tech Solutions MMC">
             
             <label>Əsas Kateqoriya *</label>
-            <select id="mainCat" onchange="showSubCat()">
+            <select id="mainCat" onchange="updateSubCats()">
                 <option value="">-- Kateqoriya seç --</option>
-                <option value="satis">Satış</option>
-                <option value="tikinti">Tikinti və təmir</option>
-                <option value="surucu">Sürücülük və logistika</option>
-                <option value="restoran">Restoran və xidmət</option>
-                <option value="it">IT və texnologiya</option>
-                <option value="muhasib">Mühasibatlıq və maliyyə</option>
-                <option value="tehsil">Təhsil və tibb</option>
-                <option value="ofis">İnzibati və ofis</option>
+                <option value="Satış">📢 Satış</option>
+                <option value="Tikinti və təmir">🔨 Tikinti və təmir</option>
+                <option value="Sürücülük və logistika">🚗 Sürücülük və logistika</option>
+                <option value="Restoran və xidmət">🍽️ Restoran və xidmət</option>
+                <option value="IT və texnologiya">💻 IT və texnologiya</option>
+                <option value="Mühasibatlıq və maliyyə">📊 Mühasibatlıq və maliyyə</option>
+                <option value="Təhsil və tibb">📚 Təhsil və tibb</option>
+                <option value="İnzibati və ofis">📋 İnzibati və ofis</option>
             </select>
             
             <label>Alt Kateqoriya *</label>
@@ -64,7 +67,7 @@
             </select>
             
             <label>Şəhər *</label>
-            <select>
+            <select id="city">
                 <option value="">-- Şəhər seç --</option>
                 <option>Bakı</option>
                 <option>Sumqayıt</option>
@@ -76,128 +79,70 @@
                 <option>Naxçıvan</option>
                 <option>Lənkəran</option>
                 <option>Xaçmaz</option>
-                <option>Daşkəsən</option>
-                <option>Qazax</option>
-                <option>Balakən</option>
-                <option>Zaqatala</option>
-                <option>Qusar</option>
-                <option>Siyəzən</option>
-                <option>Şabran</option>
-                <option>Cəlilabad</option>
-                <option>Masallı</option>
-                <option>Astara</option>
-                <option>İmişli</option>
-                <option>Bərdə</option>
-                <option>Tovuz</option>
-                <option>Ağstafa</option>
-                <option>Qəbələ</option>
-                <option>İsmayıllı</option>
-                <option>Şamaxı</option>
-                <option>Hacıqabul</option>
-                <option>Saatlı</option>
-                <option>Sabirabad</option>
-                <option>Hacıqabul</option>
-                <option>Neftçala</option>
-                <option>Salyan</option>
-                <option>Biləsuvar</option>
-                <option>Cəbrayıl</option>
-                <option>Füzuli</option>
-                <option>Xocavənd</option>
-                <option>Şuşa</option>
-                <option>Xankəndi</option>
-                <option>Ağdam</option>
-                <option>Tərtər</option>
-                <option>Beyləqan</option>
-                <option>Zəngilan</option>
-                <option>Qubadlı</option>
-                <option>Ləçin</option>
-                <option>Kəlbəcər</option>
-                <option>Laçın</option>
-                <option>Şuşa</option>
-                <option>Xocalı</option>
-                <option>Ağcabədi</option>
-                <option>Ağsu</option>
-                <option>Göyçay</option>
-                <option>Ucar</option>
-                <option>Kürdəmir</option>
-                <option>Hacıqabul</option>
-                <option>Əli-Bayramlı</option>
-                <option>Yevlax</option>
-                <option>Göygöl</option>
-                <option>Daşkəsən</option>
-                <option>Gədəbəy</option>
-                <option>Şəmkir</option>
-                <option>Samux</option>
-                <option>Qazax</option>
-                <option>Ağstafa</option>
-                <option>Tovuz</option>
-                <option>Şəki</option>
-                <option>Oğuz</option>
-                <option>Qax</option>
-                <option>Zaqatala</option>
-                <option>Balakən</option>
-                <option>İlisu</option>
             </select>
             
             <label>Əmək haqqı (AZN)</label>
-            <input type="text" placeholder="Məs: 2000-3000 vəya 1500+">
+            <input type="text" id="salary" placeholder="Məs: 2000-3000 vəya 1500+">
             <p class="hint">Boş qoysan, "Razılaşma yolu ilə" yazılacaq</p>
             
-            <label>İş təcrübəsi</label>
-            <select>
-                <option>Təcrübə tələb olunmur</option>
-                <option>1 ildən az</option>
-                <option>1-3 il</option>
-                <option>3-5 il</option>
-                <option>5 ildən çox</option>
-            </select>
-            
-            <label>İş qrafiki</label>
-            <select>
-                <option>Full-time (tam ştat)</option>
-                <option>Part-time (yarım ştat)</option>
-                <option>Freelance</option>
-                <option>Remote (udalənka)</option>
-                <option>Dəyişən qrafik</option>
-            </select>
-            
             <label>Əlaqə telefonu *</label>
-            <input type="tel" placeholder="Məs: 050 123 45 67">
+            <input type="tel" id="phone" placeholder="Məs: 050 123 45 67">
             
             <label>Əlaqə emaili</label>
-            <input type="email" placeholder="Məs: info@company.com">
+            <input type="email" id="email" placeholder="Məs: info@company.com">
             
             <label>İş təsviri və tələblər *</label>
-            <textarea placeholder="• Vəzifə öhdəlikləri&#10;• Namizədə tələblər&#10;• İş şəraiti&#10;• Əlavə məlumatlar"></textarea>
+            <textarea id="description" placeholder="• Vəzifə öhdəlikləri&#10;• Namizədə tələblər&#10;• İş şəraiti&#10;• Əlavə məlumatlar"></textarea>
             
-            <button>✅ Vakansiya əlavə et</button>
+            <button onclick="addJob()" id="submitBtn">✅ Vakansiya əlavə et</button>
+            
+            <div class="loading" id="loading">⏳ Göndərilir...</div>
+            <div class="error" id="error"></div>
+            <div class="success" id="success"></div>
             
             <div class="back">
                 <a href="index.html">← Ana səhifəyə qayıt</a>
             </div>
         </div>
     </div>
-    
+
+    <!-- Alt kateqoriyalar üçün skript (modul deyil, adi skript) -->
     <script>
+        // Alt kateqoriyalar siyahısı
         const subCategories = {
-            satis: ['Satıcı', 'Kassir', 'Satıcı-kassir', 'Daşınmaz əmlak agenti', 'Makler', 'Satış meneceri', 'Satış təmsilçisi', 'Distribütor', 'Merçendayzer'],
-            tikinti: ['Fəhlə', 'Plastik pəncərə ustası', 'Alüminium ustası', 'Elektrik', 'Santexnik', 'Mebel ustası', 'Malyar', 'Pol usta', 'Dam ustası', 'Kafel ustası', 'Mühəndis', 'Tikinti nəzarətçisi', 'Baş mühəndis'],
-            surucu: ['Sürücü', 'Kuryer', 'Sürücü-kuryer', 'Taksi şəxsi', 'Avtobus sürücüsü', 'Yük maşını sürücüsü', 'Ekskavator sürücüsü', 'Forklift sürücüsü'],
-            restoran: ['Ofisiant', 'Barmen', 'Aşpaz', 'Sous-şef', 'Şef aşpaz', 'Xadimə', 'Hostes', 'Menecer', 'Administrator', 'Kassir', 'Anbarçı', 'Çörəkçi', 'Konfetçi'],
-            it: ['Frontend Developer', 'Backend Developer', 'Full Stack Developer', 'Mobile Developer', 'UI/UX Dizayner', 'Qrafik dizayner', 'SMM menecer', 'Data analitik', 'SEO mütəxəssis', 'Kontent menecer', 'IT mütəxəssis', 'Texniki dəstək', 'Sistem administratoru'],
-            muhasib: ['Mühasib', 'Baş mühasib', 'Mühasib köməkçisi', 'Vergi uçotu meneceri', 'Maliyyə analitik', 'Kassir', 'İqtisadçı'],
-            tehsil: ['Müəllim', 'Baş müəllim', 'Təlimçi', 'Tədris meneceri', 'Təbib', 'Həkim', 'Tibb bacısı', 'Tibb bacısı köməkçisi', 'Psixoloq', 'Logoped', 'Fizioterapevt', 'Laborant'],
-            ofis: ['Ofis meneceri', 'İnzibati menecer', 'Sekretar', 'Katibə', 'Resepşn', 'Operator', 'Tərcüməçi', 'HR menecer', 'HR mütəxəssis', 'Ofis administratoru', 'Menecer köməkçisi', 'Personal mütəxəssisi']
+            'Satış': ['Satıcı', 'Kassir', 'Satıcı-kassir', 'Daşınmaz əmlak agenti', 'Makler', 'Satış meneceri', 'Satış təmsilçisi'],
+            'Tikinti və təmir': ['Fəhlə', 'Plastik pəncərə ustası', 'Elektrik', 'Santexnik', 'Mebel ustası', 'Malyar'],
+            'Sürücülük və logistika': ['Sürücü', 'Kuryer', 'Sürücü-kuryer', 'Taksi şəxsi'],
+            'Restoran və xidmət': ['Ofisiant', 'Barmen', 'Aşpaz', 'Xadimə', 'Hostes'],
+            'IT və texnologiya': ['Frontend Developer', 'Backend Developer', 'Full Stack Developer', 'UI/UX Dizayner', 'SMM menecer'],
+            'Mühasibatlıq və maliyyə': ['Mühasib', 'Baş mühasib', 'Mühasib köməkçisi', 'Vergi uçotu meneceri'],
+            'Təhsil və tibb': ['Müəllim', 'Təlimçi', 'Təbib', 'Tibb bacısı', 'Psixoloq'],
+            'İnzibati və ofis': ['Ofis meneceri', 'Sekretar', 'Operator', 'Tərcüməçi', 'HR menecer']
         };
-        
-        function showSubCat() {
+
+        // Əsas kateqoriya dəyişəndə alt kateqoriyaları yenilə
+        function updateSubCats() {
             const mainCat = document.getElementById('mainCat').value;
             const subCatSelect = document.getElementById('subCat');
             
-            subCatSelect.innerHTML = '<option value="">-- Alt kateqoriya seç --</option>';
+            // Əvvəlcə təmizlə
+            subCatSelect.innerHTML = '';
             
-            if (mainCat && subCategories[mainCat]) {
-                subCategories[mainCat].forEach(sub => {
+            // Əgər kateqoriya seçilməyibsə
+            if (!mainCat) {
+                subCatSelect.innerHTML = '<option value="">-- Əvvəlcə əsas kateqoriya seç --</option>';
+                return;
+            }
+            
+            // Default seçim əlavə et
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '-- Alt kateqoriya seç --';
+            subCatSelect.appendChild(defaultOption);
+            
+            // Alt kateqoriyaları əlavə et
+            if (subCategories[mainCat]) {
+                subCategories[mainCat].forEach(function(sub) {
                     const option = document.createElement('option');
                     option.value = sub;
                     option.textContent = sub;
@@ -205,6 +150,93 @@
                 });
             }
         }
+    </script>
+
+    <!-- Firebase modul skripti -->
+    <script type="module">
+        import { auth, db, addDoc, collection, onAuthStateChanged } from './firebase-config.js';
+        
+        // Giriş yoxlama
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                alert('Vakansiya əlavə etmək üçün giriş etməlisiniz!');
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // addJob funksiyasını global et
+        window.addJob = async function() {
+            const title = document.getElementById('title').value;
+            const company = document.getElementById('company').value;
+            const mainCat = document.getElementById('mainCat').value;
+            const subCat = document.getElementById('subCat').value;
+            const city = document.getElementById('city').value;
+            const salary = document.getElementById('salary').value || 'Razılaşma yolu ilə';
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const description = document.getElementById('description').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const success = document.getElementById('success');
+            
+            // Boş yoxlama
+            if (!title || !company || !mainCat || !subCat || !city || !phone || !description) {
+                error.textContent = '⚠️ Bütün vacib sahələri doldurun!';
+                error.style.display = 'block';
+                success.style.display = 'none';
+                return;
+            }
+            
+            // Yüklənmə göstər
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            error.style.display = 'none';
+            success.style.display = 'none';
+            
+            try {
+                const user = auth.currentUser;
+                
+                // Firestore-a vakansiya əlavə et
+                await addDoc(collection(db, 'jobs'), {
+                    title: title,
+                    company: company,
+                    category: mainCat,
+                    subCategory: subCat,
+                    city: city,
+                    salary: salary,
+                    phone: phone,
+                    email: email,
+                    description: description,
+                    userId: user.uid,
+                    userEmail: user.email,
+                    status: 'pending',
+                    createdAt: new Date(),
+                    views: 0
+                });
+                
+                success.textContent = '✅ Vakansiya uğurla əlavə edildi! Admin təsdiqindən sonra dərc olunacaq.';
+                success.style.display = 'block';
+                
+                // Formu təmizlə
+                document.getElementById('title').value = '';
+                document.getElementById('company').value = '';
+                document.getElementById('mainCat').value = '';
+                updateSubCats(); // Alt kateqoriyaları sıfırla
+                document.getElementById('city').value = '';
+                document.getElementById('salary').value = '';
+                document.getElementById('phone').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('description').value = '';
+                
+            } catch (err) {
+                error.textContent = '❌ Xəta: ' + err.message;
+                error.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        };
     </script>
 </body>
 </html>
