@@ -15,7 +15,6 @@
         h2 { color: #1a73e8; margin-bottom: 20px; text-align: center; }
         input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
         button { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
-        button:hover { background: #1557b0; }
         button:disabled { background: #ccc; cursor: not-allowed; }
         .link { text-align: center; margin-top: 15px; color: #666; }
         .link a { color: #1a73e8; text-decoration: none; }
@@ -25,13 +24,9 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>İşTap.az</h1>
-    </div>
-    
+    <div class="header"><h1>İşTap.az</h1></div>
     <div class="nav">
         <a href="index.html">Ana səhifə</a>
-        <a href="add-job.html">+ Vakansiya əlavə et</a>
         <a href="login.html">Giriş</a>
     </div>
     
@@ -60,7 +55,22 @@
     </div>
 
     <script type="module">
-        import { auth, db, createUserWithEmailAndPassword, addDoc, collection } from './firebase-config.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCiAg-P6g7MDv-xPsraWjHPmUdg-wGYWJU",
+            authDomain: "istap-az.firebaseapp.com",
+            projectId: "istap-az",
+            storageBucket: "istap-az.firebasestorage.app",
+            messagingSenderId: "1014728151709",
+            appId: "1:1014728151709:web:8854f5e32d9812c2bffa74"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
         
         window.register = async function() {
             const fullName = document.getElementById('fullName').value;
@@ -73,75 +83,59 @@
             const error = document.getElementById('error');
             const success = document.getElementById('success');
             
-            // Boş yoxlama
             if (!fullName || !email || !password || !userType) {
                 error.textContent = '⚠️ Bütün sahələri doldurun!';
                 error.style.display = 'block';
                 return;
             }
             
-            // Şifrə uzunluğu
             if (password.length < 6) {
                 error.textContent = '⚠️ Şifrə minimum 6 simvol olmalıdır!';
                 error.style.display = 'block';
                 return;
             }
             
-            // Şifrə təkrarı
             if (password !== confirmPassword) {
                 error.textContent = '⚠️ Şifrələr uyğun gəlmir!';
                 error.style.display = 'block';
                 return;
             }
             
-            // Yüklənmə göstər
             registerBtn.disabled = true;
             loading.style.display = 'block';
             error.style.display = 'none';
-            success.style.display = 'none';
             
             try {
-                // Firebase Auth ilə istifadəçi yarat
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
-                // Firestore-a əlavə məlumatları yaz
                 await addDoc(collection(db, 'users'), {
                     uid: user.uid,
                     fullName: fullName,
                     email: email,
                     userType: userType,
-                    createdAt: new Date(),
-                    isActive: true
+                    createdAt: new Date()
                 });
                 
                 success.textContent = '✅ Qeydiyyat uğurlu! Yönləndirilir...';
                 success.style.display = 'block';
                 
-                // 1 saniyə gözlə, sonra ana səhifəyə yönləndir
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 1500);
                 
             } catch (err) {
-                error.textContent = '❌ ' + getErrorMessage(err.code);
+                if (err.code === 'auth/email-already-in-use') {
+                    error.textContent = '❌ Bu email artıq istifadə olunur!';
+                } else {
+                    error.textContent = '❌ Xəta baş verdi: ' + err.message;
+                }
                 error.style.display = 'block';
                 registerBtn.disabled = false;
                 loading.style.display = 'none';
             }
         };
         
-        function getErrorMessage(code) {
-            const errors = {
-                'auth/email-already-in-use': 'Bu email artıq istifadə olunur',
-                'auth/invalid-email': 'Email formatı yanlışdır',
-                'auth/weak-password': 'Şifrə çox zəifdir (minimum 6 simvol)',
-                'auth/operation-not-allowed': 'Bu əməliyyat aktiv deyil'
-            };
-            return errors[code] || 'Xəta baş verdi: ' + code;
-        }
-        
-        // Enter ilə qeydiyyat
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') register();
         });
