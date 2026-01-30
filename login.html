@@ -15,7 +15,6 @@
         h2 { color: #1a73e8; margin-bottom: 20px; text-align: center; }
         input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
         button { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
-        button:hover { background: #1557b0; }
         button:disabled { background: #ccc; cursor: not-allowed; }
         .link { text-align: center; margin-top: 15px; color: #666; }
         .link a { color: #1a73e8; text-decoration: none; }
@@ -25,13 +24,9 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>İşTap.az</h1>
-    </div>
-    
+    <div class="header"><h1>İşTap.az</h1></div>
     <div class="nav">
         <a href="index.html">Ana səhifə</a>
-        <a href="add-job.html">+ Vakansiya əlavə et</a>
         <a href="login.html">Giriş</a>
     </div>
     
@@ -53,9 +48,21 @@
     </div>
 
     <script type="module">
-        import { auth, signInWithEmailAndPassword, onAuthStateChanged } from './firebase-config.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCiAg-P6g7MDv-xPsraWjHPmUdg-wGYWJU",
+            authDomain: "istap-az.firebaseapp.com",
+            projectId: "istap-az",
+            storageBucket: "istap-az.firebasestorage.app",
+            messagingSenderId: "1014728151709",
+            appId: "1:1014728151709:web:8854f5e32d9812c2bffa74"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         
-        // Əgər artıq giriş edilibsə, ana səhifəyə yönləndir
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 window.location.href = 'index.html';
@@ -70,49 +77,32 @@
             const error = document.getElementById('error');
             const success = document.getElementById('success');
             
-            // Boş yoxlama
             if (!email || !password) {
                 error.textContent = '⚠️ Email və şifrə daxil edin!';
                 error.style.display = 'block';
                 return;
             }
             
-            // Yüklənmə göstər
             loginBtn.disabled = true;
             loading.style.display = 'block';
             error.style.display = 'none';
-            success.style.display = 'none';
             
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                await signInWithEmailAndPassword(auth, email, password);
                 success.textContent = '✅ Giriş uğurlu! Yönləndirilir...';
                 success.style.display = 'block';
-                
-                // 1 saniyə gözlə, sonra ana səhifəyə yönləndir
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 1000);
                 
             } catch (err) {
-                error.textContent = '❌ ' + getErrorMessage(err.code);
+                error.textContent = '❌ Email və ya şifrə yanlışdır!';
                 error.style.display = 'block';
                 loginBtn.disabled = false;
                 loading.style.display = 'none';
             }
         };
         
-        function getErrorMessage(code) {
-            const errors = {
-                'auth/user-not-found': 'Bu email ilə istifadəçi tapılmadı',
-                'auth/wrong-password': 'Şifrə yanlışdır',
-                'auth/invalid-email': 'Email formatı yanlışdır',
-                'auth/user-disabled': 'Bu hesab bloklanıb',
-                'auth/too-many-requests': 'Çox sayda cəhd etdiniz. Bir az gözləyin'
-            };
-            return errors[code] || 'Xəta baş verdi: ' + code;
-        }
-        
-        // Enter ilə login
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') login();
         });
